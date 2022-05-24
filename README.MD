@@ -1,8 +1,8 @@
-# DIS Integration Examples
-This project contains example implementation of common use cases for Digital Identity Service (DIS) server component. 
-All examples can be run independently. Project is implemented using Java/Gradle build and REST Client generated from OpenAPI (Swagger) definition.
+# DIS Integration Samples
+This project contains sample implementation of common use cases for Digital Identity Service (DIS) server component. 
+All samples can be run independently. Project is implemented using Java/Gradle build and REST Client generated from OpenAPI (Swagger) definition.
 
-## Available Examples
+## Available Samples
 1. [Actuator Info and Health](#actuator-info-and-health)
 2. [Check Supported Documents and their Metadata](#check-supported-documents-and-their-metadata)
 3. [Check Documents Quality](#check-documents-quality)
@@ -20,7 +20,7 @@ All examples can be run independently. Project is implemented using Java/Gradle 
 15. [Check of Face Wearables (face mask, glasses, etc.)](#check-of-face-wearables-(face-mask,-glasses,-etc.))
 
 ## Build and Run
-You can use attached Gradle wrapper for build and run of examples.
+You can use attached Gradle wrapper for build and run of samples.
 Build task will also create and build API client files from attached `swagger.json`.
 
 For project build run:
@@ -32,16 +32,16 @@ Application can be configured by modifying properties in file `./src/main/resour
 Mostly you will use:
 ```properties
 dot-identity-service-url=url_address_of_running_dot_identity_service
-example-image-url=url_adress_of_image_to_use_in_examples
-similarity.probe.example-image-url=url_adress_of_image_to_use_in_similarity_examples_as_probe
-similarity.reference.example-image-url=url_adress_of_image_to_use_in_similarity_examples_as_reference
+sample-image-url=url_adress_of_image_to_use_in_samples
+similarity.probe.sample-image-url=url_adress_of_image_to_use_in_similarity_samples_as_probe
+similarity.reference.sample-image-url=url_adress_of_image_to_use_in_similarity_samples_as_reference
 ```
 
 ## API Authentication
 The **Digital Identity Service API** is secured with an API Key authentication, therefore you will need to send an HTTP Authorization header with every request.
 Please follow our developers' documentation for detail information: [LINK](https://developers.innovatrics.com/digital-onboarding/technical/remote/dot-dis/latest/documentation/#_authentication)
 
-# Examples Description
+# Samples Description
 ## Monitoring Samples
 #### Actuator Info and Health
 This sample shows how Actuator Info (`/info`) and Health (`/heath`) endpoints can be used to check and monitor 
@@ -134,7 +134,7 @@ sequenceDiagram
 
 ### Liveness Evaluation Samples
 #### Evaluate Passive Liveness
-This example sends detection request for image under `example-image-url` and evaluates score for passive liveness.
+This sample sends detection request for image under `sample-image-url` and evaluates score for passive liveness.
 
 ```mermaid
 sequenceDiagram
@@ -154,7 +154,7 @@ sequenceDiagram
 Eye gaze liveness evaluates if live person photos are captured by detecting direction in which eyes are looking at image.
 After liveness is started and assigned ID, we can send series of photos with assigned position at which faces on them
 are supposed to be looking. After enough pictures are used (at least 4 including multiple positions), evaluation is called
-returning liveness score. Photos used in this example can be found in resources under `images/faces` directory.
+returning liveness score. Photos used in this sample can be found in resources under `images/faces` directory.
 
 ```mermaid
 sequenceDiagram
@@ -178,7 +178,7 @@ processed, the face is detected on the selfie, the document is classified, norma
 for straightforward inspection of the customer. Onboarding flow is customizable and only portion of the data can be supplied
 meeting the integrator's needs.  
 Following operations can be performed on the customer's data.  
-Example flow is shown in the sequence diagram below.
+Sample flow is shown in the sequence diagram below.
 
 ```mermaid
 sequenceDiagram
@@ -240,9 +240,9 @@ sequenceDiagram
 ## Workflows on Face Operations API
 
 #### Create and Detect Face
-This example shows basic face detection which is base for all other face related functionality. Image with face is
+This sample shows basic face detection which is base for all other face related functionality. Image with face is
 provided either as URL (has to be accessible by DIS server and contain image) or as Image bytes
-(coded in Base64 for request). Here, file in resources named `images/faces/face.jpeg` and url `example-image-url` is used.
+(coded in Base64 for request). Here, file in resources named `images/faces/face.jpeg` and url `sample-image-url` is used.
 If detection call was successful, confidence score and additional information about face are returned.
 At the end faces are deleted to free up MCache space before its expiration.
 
@@ -260,8 +260,8 @@ sequenceDiagram
 ```
 
 #### Evaluate Faces Similarity (Face to Face)
-This example compares reference photo under `similarity.reference.example-image-url` to  probe photo under 
-`similarity.probe.example-image-url` and returns score representing similarity of probe to reference.
+This sample compares reference photo under `similarity.reference.sample-image-url` to  probe photo under 
+`similarity.probe.sample-image-url` and returns score representing similarity of probe to reference.
 
 ```mermaid
 sequenceDiagram
@@ -277,10 +277,10 @@ sequenceDiagram
 ```
 
 #### Evaluate Face and Template Similarity
-This example simulate needs of face comparison witch is not happening immediately after collecting both photos.
-First workflow shows creating of reference template of face from `similarity.reference.example-image-url` 
+This sample simulate needs of face comparison witch is not happening immediately after collecting both photos.
+First workflow shows creating of reference template of face from `similarity.reference.sample-image-url` 
 (template is Byte Array object containing most important face data and can be stored for later use).  
-This template is used later in second workflow to be compared to probe image under `similarity.probe.example-image-url` 
+This template is used later in second workflow to be compared to probe image under `similarity.probe.sample-image-url` 
 Score representing similarity of probe to reference is returned.
 
 ```mermaid
@@ -306,7 +306,7 @@ sequenceDiagram
 ```
 
 #### Check Face Aspects
-This example show evaluation of aspects on detected face in custom age check. In example, retrieved values 
+This sample show evaluation of aspects on detected face in custom age check. In sample, retrieved values 
 for age and gender are used in check against configured threshold. Age check is `true` if detected age is higher
 than threshold. Detected Gender is by custom threshold decided to be `M` Male or `F` Female.
 
@@ -323,7 +323,7 @@ sequenceDiagram
 ```
 
 #### Create Face Image Crops
-In this example cropping functionalities of DIS are shown. First, face is detected on image under `example-image-url`.
+In this sample cropping functionalities of DIS are shown. First, face is detected on image under `sample-image-url`.
 Crop Coordinates are evaluated for face returning coordinates under which face to be cropped can be found.
 There is also information if face is fully in image. 
 
@@ -349,11 +349,11 @@ sequenceDiagram
 
 #### Evaluate Face Image Quality
 Face Image Quality functionality returns set of evaluated attributes that can be used to create custom quality check
-either from values provided in documentation or your own completely custom values. In this example, documented values 
+either from values provided in documentation or your own completely custom values. In this sample, documented values 
 for evaluating glasses are used (see DIS documentation). For selected attributes we check if they are in defined range
 and if their preconditions are met (if preconditions are not met, attribute value is not reliable).
 
-Face is detected on image under `example-image-url`. Quality attributes are then obtained from recognized face and 
+Face is detected on image under `sample-image-url`. Quality attributes are then obtained from recognized face and 
 from these, face confidence, yaw and pitch angle are evaluated by given conditions.
 
 ```mermaid
@@ -369,7 +369,7 @@ sequenceDiagram
 ```
 
 #### Check of Face Wearables (face mask, glasses, etc.)
-In these examples, face is detected on image under `example-image-url`. With requests on `/mask` and `/glasses` endpoints,
+In these samples, face is detected on image under `sample-image-url`. With requests on `/mask` and `/glasses` endpoints,
 required scores for face-mask and glasses are returned and can be checked against custom threshold to decide if face 
 has these features. 
 
