@@ -1,6 +1,6 @@
 # DIS Integration Samples
 This project contains sample implementation of common [online identity verification](https://developers.innovatrics.com/digital-onboarding/docs/use-cases/onboarding/) use cases for [Digital Identity Service (DIS)](https://developers.innovatrics.com/digital-onboarding/technical/remote/dot-dis/latest/documentation/) server component.
-All samples can run independently. Project is implemented using Java/Gradle build and REST Client generated from [OpenAPI (Swagger) definition](https://innovatrics.github.io/dot-digital-identity-service/?url=https://raw.githubusercontent.com/innovatrics/dot-digital-identity-service/1.1.1/api/swagger.json).
+All samples can run independently. Project is implemented using Java/Gradle build and REST Client generated from [OpenAPI (Swagger) definition](https://innovatrics.github.io/dot-digital-identity-service/?url=https://raw.githubusercontent.com/innovatrics/dot-digital-identity-service/master/api/swagger.json).
 
 ## Available Samples
 1. [Actuator Info and Health](#actuator-info-and-health)
