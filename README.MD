@@ -1,6 +1,6 @@
 # DIS Integration Samples
-This project contains sample implementation of common use cases for Digital Identity Service (DIS) server component. 
-All samples can be run independently. Project is implemented using Java/Gradle build and REST Client generated from OpenAPI (Swagger) definition.
+This project contains sample implementation of common [online identity verification](https://developers.innovatrics.com/digital-onboarding/docs/use-cases/onboarding/) use cases for [Digital Identity Service (DIS)](https://developers.innovatrics.com/digital-onboarding/technical/remote/dot-dis/latest/documentation/) server component.
+All samples can run independently. Project is implemented using Java/Gradle build and REST Client generated from [OpenAPI (Swagger) definition](https://innovatrics.github.io/dot-digital-identity-service/?url=https://raw.githubusercontent.com/innovatrics/dot-digital-identity-service/1.1.1/api/swagger.json).
 
 ## Available Samples
 1. [Actuator Info and Health](#actuator-info-and-health)
@@ -44,9 +44,9 @@ Please follow our developers' documentation for detail information: [LINK](https
 # Samples Description
 ## Monitoring Samples
 #### Actuator Info and Health
-This sample shows how Actuator Info (`/info`) and Health (`/heath`) endpoints can be used to check and monitor 
+This sample shows how Actuator Info (`/info`) and Health (`/heath`) endpoints can be used to check and monitor
 if application is running, application version, date of license expiration or internal libraries version.
-These two endpoints do not need authentication. 
+These two endpoints do not need authentication.
 
 ```mermaid
 sequenceDiagram
@@ -62,7 +62,7 @@ sequenceDiagram
 ## Workflows on Customer Onboarding API
 ### Documents Handling Samples
 #### Check Supported Documents and their Metadata
-This sample shows how Documents Metadata (`/metadata`) endpoint can be used to check supported documents,
+This sample shows how Documents Metadata (`/metadata`) endpoint can be used to check supported ID documents,
 their type, edition, fields which can be read from document and information if portrait is presented on document.
 
 ```mermaid
@@ -75,7 +75,7 @@ sequenceDiagram
 ```
 
 #### Check Documents Quality
-This sample shows how to check document image quality and evaluate if document is usable for text extraction
+This sample shows how to check ID document image quality and evaluate if document is usable for [OCR text extraction](https://developers.innovatrics.com/digital-onboarding/docs/functionalities/document/ocr/)
 or if image has key issues which can cause incorrect classification, incorrect data reading or other issues caused mostly by hotspots, sharpness, brightness, etc.
 
 ```mermaid
@@ -134,7 +134,7 @@ sequenceDiagram
 
 ### Liveness Evaluation Samples
 #### Evaluate Passive Liveness
-This sample sends detection request for image under `sample-image-url` and evaluates score for passive liveness.
+This sample sends detection request for image under `sample-image-url` and evaluates score for [passive liveness detection](https://developers.innovatrics.com/digital-onboarding/docs/functionalities/face/passive-liveness-check/).
 
 ```mermaid
 sequenceDiagram
@@ -147,11 +147,11 @@ sequenceDiagram
     Client->>DIS: Create passive liveness selfie
     Client->>+DIS: Evaluate passive liveness
     DIS-->>-Client: Passive liveness result
-    Client->>+DIS: Delete customer 
+    Client->>+DIS: Delete customer
 ```
 
 #### Evaluate Eye-gaze Liveness
-Eye gaze liveness evaluates if live person photos are captured by detecting direction in which eyes are looking at image.
+Eye gaze liveness evaluates (a method of [active liveness detection](https://developers.innovatrics.com/digital-onboarding/docs/functionalities/face/active-liveness-check/)) if live person photos are captured by detecting direction in which eyes are looking at image.
 After liveness is started and assigned ID, we can send series of photos with assigned position at which faces on them
 are supposed to be looking. After enough pictures are used (at least 4 including multiple positions), evaluation is called
 returning liveness score. Photos used in this sample can be found in resources under `images/faces` directory.
@@ -189,16 +189,16 @@ sequenceDiagram
     DIS-->>-Client: Customer ID
     par selfie
     Client->>+DIS: Create customer's selfie
-    DIS-->>-Client: 
+    DIS-->>-Client:
     and passive liveness
     Client->>+DIS: Create customer's liveness
-    DIS-->>-Client: 
+    DIS-->>-Client:
     Client->>DIS: Create passive liveness selfie
     Client->>+DIS: Evaluate passive liveness
     DIS-->>-Client: Passive liveness result
     and document
     Client->>+DIS: Create customer's document
-    DIS-->>-Client: 
+    DIS-->>-Client:
     Client->>DIS: Create document front page
     Client->>DIS: Create document back page
     end
@@ -217,13 +217,13 @@ sequenceDiagram
     Client->>DIS: Delete customer   
 ```
 
-### Customer Inspect and Document Inspect 
+### Customer Inspect and Document Inspect
 This sample is based on Comprehensive Customer Onboarding Workflow described above and extend it with more information based on all data collected during onboarding process.
-There are tho endpoints used for inspection of data consistency.
+There are two endpoints used for inspection of data consistency.
 Customer Inspect `/inspect` is based around customer face and will provide you information mostly about selfie, liveness,
 face verification across all photos (including document portrait), gender and age based on photos (including document portrait) and other data.
 Document Inspect `/document/inspect` is based around documents data and will provide you information mostly about document validity,
-MRZ checksums validity, quality, data consistency, gender and age based on document portrait (including selfie and liveness) and other data. 
+MRZ checksums validity, quality, data consistency, gender and age based on document portrait (including selfie and liveness) and other data.
 
 ```mermaid
 sequenceDiagram
@@ -240,7 +240,7 @@ sequenceDiagram
 ## Workflows on Face Operations API
 
 #### Create and Detect Face
-This sample shows basic face detection which is base for all other face related functionality. Image with face is
+This sample shows basic [face detection](https://developers.innovatrics.com/digital-onboarding/docs/functionalities/face/detection/) which is base for all other face related functionality. Image with face is
 provided either as URL (has to be accessible by DIS server and contain image) or as Image bytes
 (coded in Base64 for request). Here, file in resources named `images/faces/face.jpeg` and url `sample-image-url` is used.
 If detection call was successful, confidence score and additional information about face are returned.
@@ -260,7 +260,7 @@ sequenceDiagram
 ```
 
 #### Evaluate Faces Similarity (Face to Face)
-This sample compares reference photo under `similarity.reference.sample-image-url` to  probe photo under 
+This sample for [face matching](https://developers.innovatrics.com/digital-onboarding/docs/functionalities/face/matching/) compares reference photo under `similarity.reference.sample-image-url` to  probe photo under
 `similarity.probe.sample-image-url` and returns score representing similarity of probe to reference.
 
 ```mermaid
@@ -278,9 +278,9 @@ sequenceDiagram
 
 #### Evaluate Face and Template Similarity
 This sample simulate needs of face comparison witch is not happening immediately after collecting both photos.
-First workflow shows creating of reference template of face from `similarity.reference.sample-image-url` 
+First workflow shows creating of reference template of face from `similarity.reference.sample-image-url`
 (template is Byte Array object containing most important face data and can be stored for later use).  
-This template is used later in second workflow to be compared to probe image under `similarity.probe.sample-image-url` 
+This template is used later in second workflow to be compared to probe image under `similarity.probe.sample-image-url`
 Score representing similarity of probe to reference is returned.
 
 ```mermaid
@@ -306,7 +306,7 @@ sequenceDiagram
 ```
 
 #### Check Face Aspects
-This sample show evaluation of aspects on detected face in custom age check. In sample, retrieved values 
+This sample show evaluation of aspects on detected face in custom age check. In sample, retrieved values
 for age and gender are used in check against configured threshold. Age check is `true` if detected age is higher
 than threshold. Detected Gender is by custom threshold decided to be `M` Male or `F` Female.
 
@@ -325,9 +325,9 @@ sequenceDiagram
 #### Create Face Image Crops
 In this sample cropping functionalities of DIS are shown. First, face is detected on image under `sample-image-url`.
 Crop Coordinates are evaluated for face returning coordinates under which face to be cropped can be found.
-There is also information if face is fully in image. 
+There is also information if face is fully in image.
 
-Crop of face and crop with removed background are then requested and obtained. 
+Crop of face and crop with removed background are then requested and obtained.
 Result images are stored under `./faceImageCropsOutput/croppedFaceImage.png` and `./faceImageCropsOutput/removedBackgroundFaceImage.png`.
 
 ```mermaid
@@ -349,11 +349,11 @@ sequenceDiagram
 
 #### Evaluate Face Image Quality
 Face Image Quality functionality returns set of evaluated attributes that can be used to create custom quality check
-either from values provided in documentation or your own completely custom values. In this sample, documented values 
+either from values provided in documentation or your own completely custom values. In this sample, documented values
 for evaluating glasses are used (see DIS documentation). For selected attributes we check if they are in defined range
 and if their preconditions are met (if preconditions are not met, attribute value is not reliable).
 
-Face is detected on image under `sample-image-url`. Quality attributes are then obtained from recognized face and 
+Face is detected on image under `sample-image-url`. Quality attributes are then obtained from recognized face and
 from these, face confidence, yaw and pitch angle are evaluated by given conditions.
 
 ```mermaid
@@ -370,8 +370,8 @@ sequenceDiagram
 
 #### Check of Face Wearables (face mask, glasses, etc.)
 In these samples, face is detected on image under `sample-image-url`. With requests on `/mask` and `/glasses` endpoints,
-required scores for face-mask and glasses are returned and can be checked against custom threshold to decide if face 
-has these features. 
+required scores for face-mask and glasses are returned and can be checked against custom threshold to decide if face
+has these features.
 
 ```mermaid
 sequenceDiagram
