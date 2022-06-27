@@ -10,14 +10,15 @@ All samples can run independently. Project is implemented using Java/Gradle buil
 5. [Read Only MRZ Data from Document or Unsupported Document](#read-only-mrz-data-from-document-or-unsupported-document)
 6. [Evaluate Passive Liveness](#evaluate-passive-liveness)
 7. [Evaluate Eye-gaze Liveness](#evaluate-eye-gaze-liveness)
-8. [Comprehensive Customer Onboarding Workflow](#comprehensive-customer-onboarding-workflow)
-9. [Customer Inspect and Document Inspect](#customer-inspect-and-document-inspect)
-10. [Create and Detect Face](#create-and-detect-face)
-11. [Evaluate Faces Similarity (Face to Face)](#evaluate-faces-similarity-(face-to-face))
-12. [Check Face Aspects](#check-face-aspects)
-13. [Create Face Image Crops](#create-face-image-crops)
-14. [Evaluate Face Image Quality](#evaluate-face-image-quality)
-15. [Check of Face Wearables (face mask, glasses, etc.)](#check-of-face-wearables-(face-mask,-glasses,-etc.))
+8. [Evaluate Smile Liveness](#evaluate-smile-liveness)
+9. [Comprehensive Customer Onboarding Workflow](#comprehensive-customer-onboarding-workflow)
+10. [Customer Inspect and Document Inspect](#customer-inspect-and-document-inspect)
+11. [Create and Detect Face](#create-and-detect-face)
+12. [Evaluate Faces Similarity (Face to Face)](#evaluate-faces-similarity-(face-to-face))
+13. [Check Face Aspects](#check-face-aspects)
+14. [Create Face Image Crops](#create-face-image-crops)
+15. [Evaluate Face Image Quality](#evaluate-face-image-quality)
+16. [Check of Face Wearables (face mask, glasses, etc.)](#check-of-face-wearables-(face-mask,-glasses,-etc.))
 
 ## Build and Run
 You can use attached Gradle wrapper for build and run of samples.
@@ -151,10 +152,10 @@ sequenceDiagram
 ```
 
 #### Evaluate Eye-gaze Liveness
-Eye gaze liveness evaluates (a method of [active liveness detection](https://developers.innovatrics.com/digital-onboarding/docs/functionalities/face/active-liveness-check/)) if live person photos are captured by detecting direction in which eyes are looking at image.
-After liveness is started and assigned ID, we can send series of photos with assigned position at which faces on them
+Eye gaze liveness evaluates (a method of [active liveness detection](https://developers.innovatrics.com/digital-onboarding/docs/functionalities/face/active-liveness-check)) if live person photos are captured by detecting direction in which eyes are looking at image.
+After liveness is started and has an ID assigned, we can send series of photos with assigned position at which faces on them
 are supposed to be looking. After enough pictures are used (at least 4 including multiple positions), evaluation is called
-returning liveness score. Photos used in this sample can be found in resources under `images/faces` directory.
+returning a liveness score. Photos used in this sample can be found in resources under the `images/faces` directory.
 
 ```mermaid
 sequenceDiagram
@@ -169,6 +170,25 @@ sequenceDiagram
     end
     Client->>+DIS: Evaluate eye gaze liveness
     DIS-->>-Client: The eye gaze liveness score
+```
+
+### Evaluate Smile Liveness
+Smile liveness evaluates (a method of [active liveness detection](https://developers.innovatrics.com/digital-onboarding/docs/functionalities/face/active-liveness-check)) if live person photos are captured by prompting the person to smile at a specific moment and after capturing their neutral (non-smiling) expression.
+After liveness is started and has an ID assigned, we can send two photos, one of a neutral and another one of a smiling expression. After these photos are sent, the evaluation is called,
+returning a liveness score. Photos used in this sample can be found in resources under the `images/faces` directory.
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant DIS
+
+    Client->>+DIS: Create customer
+    DIS-->>-Client: Customer ID
+    Client->>DIS: Create customer's liveness
+    Client->>DIS: Neutral expression photo
+    Client->>DIS: Smiling expression photo
+    Client->>+DIS: Evaluate smile liveness
+    DIS-->>-Client: The smile liveness score
 ```
 
 ### Comprehensive Customer Onboarding Workflow
@@ -189,16 +209,16 @@ sequenceDiagram
     DIS-->>-Client: Customer ID
     par selfie
     Client->>+DIS: Create customer's selfie
-    DIS-->>-Client:
+    DIS-->>-Client: 
     and passive liveness
     Client->>+DIS: Create customer's liveness
-    DIS-->>-Client:
+    DIS-->>-Client: 
     Client->>DIS: Create passive liveness selfie
     Client->>+DIS: Evaluate passive liveness
     DIS-->>-Client: Passive liveness result
     and document
     Client->>+DIS: Create customer's document
-    DIS-->>-Client:
+    DIS-->>-Client: 
     Client->>DIS: Create document front page
     Client->>DIS: Create document back page
     end
