@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Digital Identity Service API",
-    "version": "1.1.1"
+    "version": "1.4.0"
   },
   "servers": [
     {
@@ -10,6 +10,9 @@
     }
   ],
   "tags": [
+    {
+      "name": "Trust Center"
+    },
     {
       "name": "Customer onboarding"
     },
@@ -763,6 +766,94 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CreateCustomerResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api": []
+          }
+        ]
+      }
+    },
+    "/api/v1/customers/{id}/store": {
+      "post": {
+        "tags": [
+          "Trust Center"
+        ],
+        "summary": "Store customer in the Trust Center",
+        "operationId": "storeInTrustCenter",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CustomerStoreRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID\n - INVALID_REQUEST_BODY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found\n\nPossible error codes:\n - NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict\n\nPossible error codes:\n - CONFLICT",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
                 }
               }
             }
@@ -2622,7 +2713,7 @@
               "version": {
                 "type": "string",
                 "readOnly": true,
-                "example": "4.15.0"
+                "example": "4.16.0"
               },
               "license": {
                 "required": [
@@ -2720,6 +2811,41 @@
         },
         "description": "Image provided as Base64 encoded string or via URL. Data or URL have to be provided.",
         "writeOnly": true
+      },
+      "ErrorResponse": {
+        "required": [
+          "errorCode",
+          "errorMessage"
+        ],
+        "type": "object",
+        "properties": {
+          "errorCode": {
+            "type": "string",
+            "description": "Error code",
+            "readOnly": true,
+            "enum": [
+              "NOT_FOUND",
+              "INVALID_ID",
+              "INVALID_IMAGE",
+              "INVALID_REQUEST_BODY",
+              "INVALID_REQUEST_PARAMETER",
+              "INVALID_REQUEST_METHOD",
+              "CONFLICT",
+              "UNEXPECTED_ERROR",
+              "FACE_SIZE_MEMORY_LIMIT",
+              "INCOMPATIBLE_TEMPLATE",
+              "CORRUPTED_TEMPLATE",
+              "UNSUPPORTED_VERSION_TEMPLATE"
+            ]
+          },
+          "errorMessage": {
+            "type": "string",
+            "description": "Error detailed description. It's only informative.",
+            "readOnly": true
+          }
+        },
+        "description": "Error response",
+        "readOnly": true
       },
       "CreateSelfieResponse": {
         "type": "object",
@@ -2840,41 +2966,6 @@
           }
         },
         "description": "The region of the interest. The coordinates of the rectangle.",
-        "readOnly": true
-      },
-      "ErrorResponse": {
-        "required": [
-          "errorCode",
-          "errorMessage"
-        ],
-        "type": "object",
-        "properties": {
-          "errorCode": {
-            "type": "string",
-            "description": "Error code",
-            "readOnly": true,
-            "enum": [
-              "NOT_FOUND",
-              "INVALID_ID",
-              "INVALID_IMAGE",
-              "INVALID_REQUEST_BODY",
-              "INVALID_REQUEST_PARAMETER",
-              "INVALID_REQUEST_METHOD",
-              "CONFLICT",
-              "UNEXPECTED_ERROR",
-              "FACE_SIZE_MEMORY_LIMIT",
-              "INCOMPATIBLE_TEMPLATE",
-              "CORRUPTED_TEMPLATE",
-              "UNSUPPORTED_VERSION_TEMPLATE"
-            ]
-          },
-          "errorMessage": {
-            "type": "string",
-            "description": "Error detailed description. It's only informative.",
-            "readOnly": true
-          }
-        },
-        "description": "Error response",
         "readOnly": true
       },
       "CreateCustomerLivenessResponse": {
@@ -3314,6 +3405,31 @@
           }
         },
         "readOnly": true
+      },
+      "CustomerStoreRequest": {
+        "required": [
+          "onboardingStatus"
+        ],
+        "type": "object",
+        "properties": {
+          "externalId": {
+            "pattern": "^[a-zA-Z\\d_-]{1,64}$",
+            "type": "string",
+            "description": "External identifier of the customer (for pairing between Trust Platform and external database), limited to alphanumeric, '-' and '_' characters and maximum length of 64. If not supplied, the UUID of the customer present in the request URL is used instead.",
+            "writeOnly": true,
+            "example": "55bd71d3-12cc-4c15-accd-b6dc8702bf3b"
+          },
+          "onboardingStatus": {
+            "type": "string",
+            "description": "Onboarding status of the customer to be stored in the Trust Platform. Use the FINISHED status only if you have collected all required data of the customer.",
+            "writeOnly": true,
+            "example": "IN_PROGRESS",
+            "enum": [
+              "IN_PROGRESS",
+              "FINISHED"
+            ]
+          }
+        }
       },
       "CreateCustomerLivenessSelfieRequest": {
         "required": [
