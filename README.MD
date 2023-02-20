@@ -38,6 +38,13 @@ similarity.probe.sample-image-url=url_adress_of_image_to_use_in_similarity_sampl
 similarity.reference.sample-image-url=url_adress_of_image_to_use_in_similarity_samples_as_reference
 ```
 
+To test the samples you will need to deploy the Digital Identity Service or ask Innovatrics' sales representative to provide you with a testing environment. To configure the environment, please edit the file `./src/main/resources/application.properties` with details provided by the Innovatrics' sales representative for the following properties:
+
+```properties
+dot-identity-service-url=http://localhost:8080
+dot-authentication-token=YourAuthenticationToken
+```
+
 ## API Authentication
 The **Digital Identity Service API** is secured with an API Key authentication, therefore you will need to send an HTTP Authorization header with every request.
 Please follow our developers' documentation for detail information: [LINK](https://developers.innovatrics.com/digital-onboarding/technical/remote/dot-dis/latest/documentation/#_authentication)
