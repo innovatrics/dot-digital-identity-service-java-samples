@@ -7,6 +7,7 @@ import java.util.Properties;
 public class Configuration {
     public final String DOT_IDENTITY_SERVICE_URL;
     public final String DOT_AUTHENTICATION_TOKEN;
+    public final String LIVENESS_RECORDS_MAGNIFEYE_LIVENESS_BINARY_FILE;
     public final String SIMILARITY_PROBE_IMAGE_URL;
     public final String SIMILARITY_REFERENCE_IMAGE_URL;
     public final String EXAMPLE_IMAGE_URL;
@@ -27,6 +28,7 @@ public class Configuration {
         appProps.load(new FileInputStream(Configuration.class.getClassLoader().getResource("application.properties").getPath()));
         DOT_IDENTITY_SERVICE_URL = appProps.getProperty("dot-identity-service-url");
         DOT_AUTHENTICATION_TOKEN = appProps.getProperty("dot-authentication-token");
+        LIVENESS_RECORDS_MAGNIFEYE_LIVENESS_BINARY_FILE = appProps.getProperty("liveness-records.magnifeye-liveness.binary-file");
         EXAMPLE_IMAGE_URL = appProps.getProperty("example-image-url");
         SIMILARITY_PROBE_IMAGE_URL = appProps.getProperty("similarity.probe.example-image-url");
         SIMILARITY_REFERENCE_IMAGE_URL = appProps.getProperty("similarity.reference.example-image-url");

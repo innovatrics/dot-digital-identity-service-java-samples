@@ -109,7 +109,7 @@ public class CustomerInspectAndDocumentInspectCheck {
             }
 
             LOG.info("Deleting customer with id: " + customerId);
-            customerOnboardingApi.delete(customerId);
+            customerOnboardingApi.deleteCustomer(customerId);
         } catch (ApiException exception) {
             LOG.error("Request to server failed with code: " + exception.getCode() + " and response: " + exception.getResponseBody());
         }

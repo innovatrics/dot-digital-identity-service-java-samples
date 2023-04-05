@@ -11,14 +11,16 @@ All samples can run independently. Project is implemented using Java/Gradle buil
 6. [Evaluate Passive Liveness](#evaluate-passive-liveness)
 7. [Evaluate Eye-gaze Liveness](#evaluate-eye-gaze-liveness)
 8. [Evaluate Smile Liveness](#evaluate-smile-liveness)
-9. [Comprehensive Customer Onboarding Workflow](#comprehensive-customer-onboarding-workflow)
-10. [Customer Inspect and Document Inspect](#customer-inspect-and-document-inspect)
-11. [Create and Detect Face](#create-and-detect-face)
-12. [Evaluate Faces Similarity (Face to Face)](#evaluate-faces-similarity-(face-to-face))
-13. [Check Face Aspects](#check-face-aspects)
-14. [Create Face Image Crops](#create-face-image-crops)
-15. [Evaluate Face Image Quality](#evaluate-face-image-quality)
-16. [Check of Face Wearables (face mask, glasses, etc.)](#check-of-face-wearables-(face-mask,-glasses,-etc.))
+9. [Evaluate Magnifeye Liveness](#evaluate-magnifeye-liveness)
+10. [Comprehensive Customer Onboarding Workflow](#comprehensive-customer-onboarding-workflow)
+11. [Customer Onboarding Workflow with MagnifEye Liveness](#customer-onboarding-workflow-with-magnifeye-liveness)
+12. [Customer Inspect and Document Inspect](#customer-inspect-and-document-inspect)
+13. [Create and Detect Face](#create-and-detect-face)
+14. [Evaluate Faces Similarity (Face to Face)](#evaluate-faces-similarity-face-to-face)
+15. [Check Face Aspects](#check-face-aspects)
+16. [Create Face Image Crops](#create-face-image-crops)
+17. [Evaluate Face Image Quality](#evaluate-face-image-quality)
+18. [Check of Face Wearables (face mask, glasses, etc.)](#check-of-face-wearables-face-mask-glasses-etc)
 
 ## Build and Run
 You can use attached Gradle wrapper for build and run of samples.
@@ -33,9 +35,9 @@ Application can be configured by modifying properties in file `./src/main/resour
 Mostly you will use:
 ```properties
 dot-identity-service-url=url_address_of_running_dot_identity_service
-sample-image-url=url_adress_of_image_to_use_in_samples
-similarity.probe.sample-image-url=url_adress_of_image_to_use_in_similarity_samples_as_probe
-similarity.reference.sample-image-url=url_adress_of_image_to_use_in_similarity_samples_as_reference
+example-image-url=url_adress_of_image_to_use_in_samples
+similarity.probe.example-image-url=url_adress_of_image_to_use_in_similarity_samples_as_probe
+similarity.reference.example-image-url=url_adress_of_image_to_use_in_similarity_samples_as_reference
 ```
 
 To test the samples you will need to deploy the Digital Identity Service or ask Innovatrics' sales representative to provide you with a testing environment. To configure the environment, please edit the file `./src/main/resources/application.properties` with details provided by the Innovatrics' sales representative for the following properties:
@@ -142,7 +144,7 @@ sequenceDiagram
 
 ### Liveness Evaluation Samples
 #### Evaluate Passive Liveness
-This sample sends detection request for image under `sample-image-url` and evaluates score for [passive liveness detection](https://developers.innovatrics.com/digital-onboarding/docs/functionalities/face/passive-liveness-check/).
+This sample sends detection request for image under `example-image-url` and evaluates score for [passive liveness detection](https://developers.innovatrics.com/digital-onboarding/docs/functionalities/face/passive-liveness-check/).
 
 ```mermaid
 sequenceDiagram
@@ -198,13 +200,41 @@ sequenceDiagram
     DIS-->>-Client: The smile liveness score
 ```
 
+### Evaluate MagnifEye Liveness
+MagnifEye liveness evaluates (a method of [active liveness detection](https://developers.innovatrics.com/digital-onboarding/docs/functionalities/face/active-liveness-check)) if live person photos are captured by prompting the person to capture a detailed image of the eye.
+After liveness is started and has an ID assigned, we can create a liveness record. 
+After the liveness record is created, the evaluation is called, returning a liveness score. 
+
+To test this sample, `liveness-records.magnifeye-liveness.binary-file` property must be set to your local path leading to the binary file, created by DOT mobile/web components. 
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant DIS
+
+    Client->>+DIS: Create customer
+    DIS-->>-Client: Customer ID
+    Client->>DIS: Create customer's liveness
+    Client->>+DIS: Create liveness record
+    DIS-->>-Client: Liveness record response
+    Client->>+DIS: Evaluate magnifeye liveness
+    DIS-->>-Client: The magnifeye liveness score
+    opt use liveness selfie as customer selfie
+    Client->>+DIS: Provide customer selfie with link to liveness selfie
+    DIS-->>-Client: 
+    end
+```
+
+
 ### Comprehensive Customer Onboarding Workflow
 Customer onboarding serves for creating a digital identity of an individual called a customer. Onboarding aggregates all the
 data supplied by the client like selfies or document images which can be later used for inspecting the customer. This data is
 processed, the face is detected on the selfie, the document is classified, normalized and OCR is performed. Data is structured
 for straightforward inspection of the customer. Onboarding flow is customizable and only portion of the data can be supplied
 meeting the integrator's needs.  
+
 Following operations can be performed on the customer's data.  
+
 Sample flow is shown in the sequence diagram below.
 
 ```mermaid
@@ -223,6 +253,53 @@ sequenceDiagram
     Client->>DIS: Create passive liveness selfie
     Client->>+DIS: Evaluate passive liveness
     DIS-->>-Client: Passive liveness result
+    and document
+    Client->>+DIS: Create customer's document
+    DIS-->>-Client: 
+    Client->>DIS: Create document front page
+    Client->>DIS: Create document back page
+    end
+    Client->>+DIS: Get customer's info
+    DIS-->>-Client: Customer's info
+    par front page
+    Client->>+DIS: Get document front page crop
+    DIS-->>-Client: Front page crop image
+    and back page
+    Client->>+DIS: Get document back page crop
+    DIS-->>-Client: Back page crop image
+    and document portrait
+    Client->>+DIS: Get document portrait
+    DIS-->>-Client: Document portrait image
+    end
+    Client->>DIS: Delete customer   
+```
+
+### Customer Onboarding Workflow with MagnifEye Liveness
+This sample shows alternative Customer Onboarding workflow. It follows the same concept as the workflow described above,
+except it evaluates MagnifEye Liveness instead of Passive Liveness and the creation of customer selfie is performed later in the workflow.
+
+When the customer is created, we create and evaluate MagnifEye liveness. Afterwards, the creation of customer selfie is performed by referencing the liveness selfie from the MagnifEye Liveness.
+As the creation of MagnifEye Liveness record is performed by submitting a binary file produced by DOT components, it provides more security and ensures the selfies are produced by our components.
+
+The sample workflow is shown in the diagram below
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant DIS
+
+    Client->>+DIS: Create customer
+    DIS-->>-Client: Customer ID
+    par MagnifEye liveness
+    Client->>+DIS: Create customer's liveness
+    DIS-->>-Client: 
+    Client->>+DIS: Create MagnifEye liveness record
+    DIS-->>-Client: Liveness record selfie link
+    Client->>+DIS: Evaluate MagnifEye liveness
+    DIS-->>-Client: MagnifEye liveness result
+    and selfie
+    Client->>+DIS: Create customer's selfie referencing MagnifEye liveness selfie
+    DIS-->>-Client: 
     and document
     Client->>+DIS: Create customer's document
     DIS-->>-Client: 
@@ -269,7 +346,7 @@ sequenceDiagram
 #### Create and Detect Face
 This sample shows basic [face detection](https://developers.innovatrics.com/digital-onboarding/docs/functionalities/face/detection/) which is base for all other face related functionality. Image with face is
 provided either as URL (has to be accessible by DIS server and contain image) or as Image bytes
-(coded in Base64 for request). Here, file in resources named `images/faces/face.jpeg` and url `sample-image-url` is used.
+(coded in Base64 for request). Here, file in resources named `images/faces/face.jpeg` and url `example-image-url` is used.
 If detection call was successful, confidence score and additional information about face are returned.
 At the end faces are deleted to free up MCache space before its expiration.
 
@@ -287,8 +364,8 @@ sequenceDiagram
 ```
 
 #### Evaluate Faces Similarity (Face to Face)
-This sample for [face matching](https://developers.innovatrics.com/digital-onboarding/docs/functionalities/face/matching/) compares reference photo under `similarity.reference.sample-image-url` to  probe photo under
-`similarity.probe.sample-image-url` and returns score representing similarity of probe to reference.
+This sample for [face matching](https://developers.innovatrics.com/digital-onboarding/docs/functionalities/face/matching/) compares reference photo under `similarity.reference.example-image-url` to  probe photo under
+`similarity.probe.example-image-url` and returns score representing similarity of probe to reference.
 
 ```mermaid
 sequenceDiagram
@@ -305,9 +382,9 @@ sequenceDiagram
 
 #### Evaluate Face and Template Similarity
 This sample simulate needs of face comparison witch is not happening immediately after collecting both photos.
-First workflow shows creating of reference template of face from `similarity.reference.sample-image-url`
+First workflow shows creating of reference template of face from `similarity.reference.example-image-url`
 (template is Byte Array object containing most important face data and can be stored for later use).  
-This template is used later in second workflow to be compared to probe image under `similarity.probe.sample-image-url`
+This template is used later in second workflow to be compared to probe image under `similarity.probe.example-image-url`
 Score representing similarity of probe to reference is returned.
 
 ```mermaid
@@ -350,7 +427,7 @@ sequenceDiagram
 ```
 
 #### Create Face Image Crops
-In this sample cropping functionalities of DIS are shown. First, face is detected on image under `sample-image-url`.
+In this sample cropping functionalities of DIS are shown. First, face is detected on image under `example-image-url`.
 Crop Coordinates are evaluated for face returning coordinates under which face to be cropped can be found.
 There is also information if face is fully in image.
 
@@ -380,7 +457,7 @@ either from values provided in documentation or your own completely custom value
 for evaluating glasses are used (see DIS documentation). For selected attributes we check if they are in defined range
 and if their preconditions are met (if preconditions are not met, attribute value is not reliable).
 
-Face is detected on image under `sample-image-url`. Quality attributes are then obtained from recognized face and
+Face is detected on image under `example-image-url`. Quality attributes are then obtained from recognized face and
 from these, face confidence, yaw and pitch angle are evaluated by given conditions.
 
 ```mermaid
@@ -396,7 +473,7 @@ sequenceDiagram
 ```
 
 #### Check of Face Wearables (face mask, glasses, etc.)
-In these samples, face is detected on image under `sample-image-url`. With requests on `/mask` and `/glasses` endpoints,
+In these samples, face is detected on image under `example-image-url`. With requests on `/mask` and `/glasses` endpoints,
 required scores for face-mask and glasses are returned and can be checked against custom threshold to decide if face
 has these features.
 

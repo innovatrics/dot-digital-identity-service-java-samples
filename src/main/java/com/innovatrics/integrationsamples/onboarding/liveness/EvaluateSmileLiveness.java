@@ -54,7 +54,7 @@ public class EvaluateSmileLiveness {
                 LOG.error("This should not happen.");
             }
 
-            customerOnboardingApi.delete(customerId);
+            customerOnboardingApi.deleteCustomer(customerId);
 
         } catch (ApiException exception) {
             LOG.error("Request to server failed with code: " + exception.getCode() + " and response: " + exception.getResponseBody());

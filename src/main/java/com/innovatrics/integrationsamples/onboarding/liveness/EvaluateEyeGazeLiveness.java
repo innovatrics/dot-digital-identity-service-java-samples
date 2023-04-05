@@ -51,7 +51,7 @@ public class EvaluateEyeGazeLiveness {
                 LOG.error("Either eyes was not detected on less then 4 segments or face was not detected on at least one segment.");
             }
 
-            customerOnboardingApi.delete(customerId);
+            customerOnboardingApi.deleteCustomer(customerId);
 
         } catch (ApiException exception) {
             LOG.error("Request to server failed with code: " + exception.getCode() + " and response: " + exception.getResponseBody());
