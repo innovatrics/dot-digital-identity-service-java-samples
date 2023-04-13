@@ -219,10 +219,6 @@ sequenceDiagram
     DIS-->>-Client: Liveness record response
     Client->>+DIS: Evaluate magnifeye liveness
     DIS-->>-Client: The magnifeye liveness score
-    opt use liveness selfie as customer selfie
-    Client->>+DIS: Provide customer selfie with link to liveness selfie
-    DIS-->>-Client: 
-    end
 ```
 
 
@@ -280,6 +276,8 @@ except it evaluates MagnifEye Liveness instead of Passive Liveness and the creat
 
 When the customer is created, we create and evaluate MagnifEye liveness. Afterwards, the creation of customer selfie is performed by referencing the liveness selfie from the MagnifEye Liveness.
 As the creation of MagnifEye Liveness record is performed by submitting a binary file produced by DOT components, it provides more security and ensures the selfies are produced by our components.
+
+To test this sample, `liveness-records.magnifeye-liveness.binary-file` property must be set to your local path leading to the binary file, created by DOT mobile/web components.
 
 The sample workflow is shown in the diagram below
 

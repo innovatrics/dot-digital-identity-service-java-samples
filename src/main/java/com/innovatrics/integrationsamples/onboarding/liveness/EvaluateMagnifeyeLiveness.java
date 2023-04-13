@@ -60,8 +60,8 @@ public class EvaluateMagnifeyeLiveness {
                 LOG.info("Customer Magnifeye Liveness score: " + magnifeyeLivenessResponse.getScore());
             } else if (magnifeyeLivenessResponse.getErrorCode() == EvaluateCustomerLivenessResponse.ErrorCodeEnum.NOT_ENOUGH_DATA) {
                 LOG.error("Liveness record has to be created to evaluate Magnifeye Liveness.");
-            } else {
-                LOG.error("This should not happen.");
+            } else if (magnifeyeLivenessResponse.getErrorCode() == EvaluateCustomerLivenessResponse.ErrorCodeEnum.INVALID_DATA){
+                LOG.error("Invalid data. Magnifeye Liveness can not be evaluated on this liveness record.");
             }
 
             customerOnboardingApi.deleteCustomer(customerId);
