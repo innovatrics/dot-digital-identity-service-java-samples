@@ -7,6 +7,10 @@ import java.util.Properties;
 public class Configuration {
     public final String DOT_IDENTITY_SERVICE_URL;
     public final String DOT_AUTHENTICATION_TOKEN;
+    public final String DOT_AUTH0_CLIENT_ID;
+    public final String DOT_AUTH0_CLIENT_SECRET;
+    public final String DOT_AUTH0_TOKEN_ENDPOINT;
+    public final String DOT_AUTH0_AUDIENCE;
     public final String LIVENESS_RECORDS_MAGNIFEYE_LIVENESS_BINARY_FILE;
     public final String SIMILARITY_PROBE_IMAGE_URL;
     public final String SIMILARITY_REFERENCE_IMAGE_URL;
@@ -28,6 +32,10 @@ public class Configuration {
         appProps.load(new FileInputStream(Configuration.class.getClassLoader().getResource("application.properties").getPath()));
         DOT_IDENTITY_SERVICE_URL = appProps.getProperty("dot-identity-service-url");
         DOT_AUTHENTICATION_TOKEN = appProps.getProperty("dot-authentication-token");
+        DOT_AUTH0_CLIENT_ID = appProps.getProperty("dot-auth0-client-id");
+        DOT_AUTH0_CLIENT_SECRET = appProps.getProperty("dot-auth0-client-secret");
+        DOT_AUTH0_TOKEN_ENDPOINT = appProps.getProperty("dot-auth0-token-endpoint");
+        DOT_AUTH0_AUDIENCE = appProps.getProperty("dot-auth0-audience");
         LIVENESS_RECORDS_MAGNIFEYE_LIVENESS_BINARY_FILE = appProps.getProperty("liveness-records.magnifeye-liveness.binary-file");
         EXAMPLE_IMAGE_URL = appProps.getProperty("example-image-url");
         SIMILARITY_PROBE_IMAGE_URL = appProps.getProperty("similarity.probe.example-image-url");
