@@ -14,13 +14,14 @@ All samples can run independently. Project is implemented using Java/Gradle buil
 9. [Evaluate Magnifeye Liveness](#evaluate-magnifeye-liveness)
 10. [Comprehensive Customer Onboarding Workflow](#comprehensive-customer-onboarding-workflow)
 11. [Customer Onboarding Workflow with MagnifEye Liveness](#customer-onboarding-workflow-with-magnifeye-liveness)
-12. [Customer Inspect and Document Inspect](#customer-inspect-and-document-inspect)
-13. [Create and Detect Face](#create-and-detect-face)
-14. [Evaluate Faces Similarity (Face to Face)](#evaluate-faces-similarity-face-to-face)
-15. [Check Face Aspects](#check-face-aspects)
-16. [Create Face Image Crops](#create-face-image-crops)
-17. [Evaluate Face Image Quality](#evaluate-face-image-quality)
-18. [Check of Face Wearables (face mask, glasses, etc.)](#check-of-face-wearables-face-mask-glasses-etc)
+12. [Customer Onboarding Workflow with request sessions](#customer-onboarding-workflow-with-request-sessions)
+13. [Customer Inspect and Document Inspect](#customer-inspect-and-document-inspect)
+14. [Create and Detect Face](#create-and-detect-face)
+15. [Evaluate Faces Similarity (Face to Face)](#evaluate-faces-similarity-face-to-face)
+16. [Check Face Aspects](#check-face-aspects)
+17. [Create Face Image Crops](#create-face-image-crops)
+18. [Evaluate Face Image Quality](#evaluate-face-image-quality)
+19. [Check of Face Wearables (face mask, glasses, etc.)](#check-of-face-wearables-face-mask-glasses-etc)
 
 ## Build and Run
 You can use attached Gradle wrapper for build and run of samples.
@@ -317,6 +318,56 @@ sequenceDiagram
     DIS-->>-Client: Document portrait image
     end
     Client->>DIS: Delete customer   
+```
+
+### Customer Onboarding Workflow with request sessions
+This sample demonstrates Customer Onboarding workflow using request sessions, which ensure the provided data were created at the time of the onboarding.
+
+Before the customer is created, session must be initialized, returning unique session token in the response. To create a customer linked to the session, the session token must be provided in the header.
+Every subsequent request accessing this customer must have the same session token present in the header.
+
+While the onboarding flow is fully customizable, it is recommended that the submission of selfie, document pages and liveness data be in the form of binary files produced by DOT components to ensure the highest level of protection.
+At the end of the onboarding process, the session is deleted, consequently deleting the linked customer as well.
+
+The sample workflow is shown in the diagram below
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant DIS
+
+    Client->>+DIS: Create session
+    DIS-->>-Client: Session token
+    Client->>+DIS: Create customer
+    DIS-->>-Client: Customer ID
+    par selfie
+    Client->>+DIS: Create customer's selfie
+    DIS-->>-Client: 
+    and passive liveness
+    Client->>+DIS: Create customer's liveness
+    DIS-->>-Client: 
+    Client->>DIS: Create passive liveness selfie
+    Client->>+DIS: Evaluate passive liveness
+    DIS-->>-Client: Passive liveness result 
+    and document
+    Client->>+DIS: Create customer's document
+    DIS-->>-Client: 
+    Client->>DIS: Create document front page
+    Client->>DIS: Create document back page
+    end
+    Client->>+DIS: Get customer's info
+    DIS-->>-Client: Customer's info
+    par front page
+    Client->>+DIS: Get document front page crop
+    DIS-->>-Client: Front page crop image
+    and back page
+    Client->>+DIS: Get document back page crop
+    DIS-->>-Client: Back page crop image
+    and document portrait
+    Client->>+DIS: Get document portrait
+    DIS-->>-Client: Document portrait image
+    end
+    Client->>DIS: Delete session
 ```
 
 ### Customer Inspect and Document Inspect

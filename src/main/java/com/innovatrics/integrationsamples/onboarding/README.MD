@@ -92,3 +92,53 @@ sequenceDiagram
     end
     Client->>DIS: Delete customer   
 ```
+
+### Customer Onboarding Workflow with request sessions
+This sample demonstrates Customer Onboarding workflow using request sessions, which ensure the provided data were created at the time of the onboarding.
+
+Before the customer is created, session must be initialized, returning unique session token in the response. To create a customer linked to the session, the session token must be provided in the header.
+Every subsequent request accessing this customer must have the same session token present in the header. 
+
+While the onboarding flow is fully customizable, it is recommended that the submission of selfie, document pages and liveness data be in the form of binary files produced by DOT components to ensure the highest level of protection.
+At the end of the onboarding process, the session is deleted, consequently deleting the linked customer as well.
+
+The sample workflow is shown in the diagram below
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant DIS
+
+    Client->>+DIS: Create session
+    DIS-->>-Client: Session token
+    Client->>+DIS: Create customer
+    DIS-->>-Client: Customer ID
+    par selfie
+    Client->>+DIS: Create customer's selfie
+    DIS-->>-Client: 
+    and passive liveness
+    Client->>+DIS: Create customer's liveness
+    DIS-->>-Client: 
+    Client->>DIS: Create passive liveness selfie
+    Client->>+DIS: Evaluate passive liveness
+    DIS-->>-Client: Passive liveness result 
+    and document
+    Client->>+DIS: Create customer's document
+    DIS-->>-Client: 
+    Client->>DIS: Create document front page
+    Client->>DIS: Create document back page
+    end
+    Client->>+DIS: Get customer's info
+    DIS-->>-Client: Customer's info
+    par front page
+    Client->>+DIS: Get document front page crop
+    DIS-->>-Client: Front page crop image
+    and back page
+    Client->>+DIS: Get document back page crop
+    DIS-->>-Client: Back page crop image
+    and document portrait
+    Client->>+DIS: Get document portrait
+    DIS-->>-Client: Document portrait image
+    end
+    Client->>DIS: Delete session
+```
