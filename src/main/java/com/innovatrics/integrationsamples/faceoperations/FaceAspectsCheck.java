@@ -27,7 +27,7 @@ public class FaceAspectsCheck {
         try {
             final Double genderDecisionThreshold = configuration.ASPECTS_CHECK_GENDER_THRESHOLD;
             final Double ageDecisionThreshold = configuration.ASPECTS_CHECK_AGE_THRESHOLD;
-            final String faceId = faceApi.detect(new CreateFaceRequest().image(new Image().url(configuration.EXAMPLE_IMAGE_URL))).getId();
+            final String faceId = faceApi.detect1(new CreateFaceRequest().image(new Image().url(configuration.EXAMPLE_IMAGE_URL))).getId();
             LOG.info("Face detected with id: " + faceId);
 
             FaceAspectsResponse faceAspectsResponse = faceApi.evaluateAspects(faceId);

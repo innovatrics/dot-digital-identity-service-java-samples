@@ -30,10 +30,10 @@ public class FaceDetection {
         final FaceOperationsApi faceApi = new FaceOperationsApi(client);
 
         try {
-            final CreateFaceResponse createFaceByUrl = faceApi.detect(new CreateFaceRequest().image(new Image().url(configuration.EXAMPLE_IMAGE_URL)));
+            final CreateFaceResponse createFaceByUrl = faceApi.detect1(new CreateFaceRequest().image(new Image().url(configuration.EXAMPLE_IMAGE_URL)));
             LOG.info("Face created with id: " + createFaceByUrl.getId() + " with detection confidence: " + createFaceByUrl.getDetection().getConfidence());
 
-            final CreateFaceResponse createFaceFromBytes = faceApi.detect(new CreateFaceRequest().image(new Image().data(getDetectionImage())));
+            final CreateFaceResponse createFaceFromBytes = faceApi.detect1(new CreateFaceRequest().image(new Image().data(getDetectionImage())));
             LOG.info("Face created with id: " + createFaceFromBytes.getId() + " with detection confidence: " + createFaceFromBytes.getDetection().getConfidence());
 
             faceApi.deleteFace(createFaceByUrl.getId());

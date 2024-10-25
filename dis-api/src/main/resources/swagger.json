@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Digital Identity Service API",
-    "version": "1.29.0"
+    "version": "1.43.0"
   },
   "servers": [
     {
@@ -53,12 +53,82 @@
       }
     },
     "/api/v1/customers/{id}/selfie": {
+      "get": {
+        "tags": [
+          "Customer onboarding"
+        ],
+        "summary": "Get customer\u0027s selfie image",
+        "operationId": "getSelfieImage",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found\n\nPossible error codes:\n - NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "400": {
+            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID\n - INVALID_REQUEST_PARAMETER",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageCrop"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api": []
+          }
+        ]
+      },
       "put": {
         "tags": [
           "Customer onboarding"
         ],
-        "summary": "Provide customer's selfie",
-        "operationId": "createSelfie",
+        "summary": "Provide customer\u0027s selfie",
+        "operationId": "createSelfie_1",
         "parameters": [
           {
             "name": "id",
@@ -79,7 +149,6 @@
             "application/octet-stream": {
               "schema": {
                 "type": "string",
-                "description": "The data bytes as Base64 encoded string.",
                 "format": "byte"
               }
             }
@@ -93,16 +162,6 @@
           "403": {
             "description": "Forbidden"
           },
-          "404": {
-            "description": "Not found\n\nPossible error codes:\n - NOT_FOUND",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
           "500": {
             "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
             "content": {
@@ -115,6 +174,16 @@
           },
           "400": {
             "description": "Bad request\n\nPossible error codes:\n - INVALID_ID\n - INVALID_REQUEST_BODY\n - INVALID_IMAGE",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found\n\nPossible error codes:\n - NOT_FOUND",
             "content": {
               "application/json": {
                 "schema": {
@@ -154,7 +223,7 @@
         "tags": [
           "Customer onboarding"
         ],
-        "summary": "Delete customer's selfie",
+        "summary": "Delete customer\u0027s selfie",
         "operationId": "deleteSelfie",
         "parameters": [
           {
@@ -167,16 +236,6 @@
           }
         ],
         "responses": {
-          "400": {
-            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
           "500": {
             "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
             "content": {
@@ -189,6 +248,16 @@
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           },
           "403": {
             "description": "Forbidden"
@@ -209,7 +278,7 @@
         "tags": [
           "Customer onboarding"
         ],
-        "summary": "Create customer's liveness",
+        "summary": "Create customer\u0027s liveness",
         "operationId": "createLiveness",
         "parameters": [
           {
@@ -222,6 +291,19 @@
           }
         ],
         "responses": {
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
           "400": {
             "description": "Bad request\n\nPossible error codes:\n - INVALID_ID",
             "content": {
@@ -242,29 +324,6 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "409": {
-            "description": "Conflict\n\nPossible error codes:\n - CONFLICT",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
           "403": {
             "description": "Forbidden"
           },
@@ -274,6 +333,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CreateCustomerLivenessResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict\n\nPossible error codes:\n - CONFLICT",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -289,7 +358,7 @@
         "tags": [
           "Customer onboarding"
         ],
-        "summary": "Delete customer's liveness",
+        "summary": "Delete customer\u0027s liveness",
         "operationId": "deleteLiveness",
         "parameters": [
           {
@@ -302,16 +371,6 @@
           }
         ],
         "responses": {
-          "400": {
-            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
           "500": {
             "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
             "content": {
@@ -324,6 +383,16 @@
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           },
           "403": {
             "description": "Forbidden"
@@ -339,12 +408,104 @@
         ]
       }
     },
+    "/api/v1/customers/{id}/liveness/records/challenge": {
+      "put": {
+        "tags": [
+          "Customer onboarding"
+        ],
+        "summary": "Create customer\u0027s liveness record challenge",
+        "operationId": "createLivenessRecordChallenge",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LivenessChallengeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LivenessChallengeResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID\n - INVALID_REQUEST_BODY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found\n\nPossible error codes:\n - NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "409": {
+            "description": "Conflict\n\nPossible error codes:\n - CONFLICT",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api": []
+          }
+        ]
+      }
+    },
     "/api/v1/customers/{id}/document": {
       "put": {
         "tags": [
           "Customer onboarding"
         ],
-        "summary": "Create customer's document",
+        "summary": "Create customer\u0027s document",
         "operationId": "createDocument",
         "parameters": [
           {
@@ -367,6 +528,19 @@
           "required": true
         },
         "responses": {
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
           "400": {
             "description": "Bad request\n\nPossible error codes:\n - INVALID_ID\n - INVALID_REQUEST_BODY",
             "content": {
@@ -387,25 +561,12 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+          "200": {
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "409": {
-            "description": "Conflict\n\nPossible error codes:\n - CONFLICT",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/CreateDocumentResponse"
                 }
               }
             }
@@ -413,12 +574,12 @@
           "403": {
             "description": "Forbidden"
           },
-          "200": {
-            "description": "OK",
+          "409": {
+            "description": "Conflict\n\nPossible error codes:\n - CONFLICT",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreateDocumentResponse"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -434,7 +595,7 @@
         "tags": [
           "Customer onboarding"
         ],
-        "summary": "Delete customer's document",
+        "summary": "Delete customer\u0027s document",
         "operationId": "deleteDocument",
         "parameters": [
           {
@@ -447,16 +608,6 @@
           }
         ],
         "responses": {
-          "400": {
-            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
           "500": {
             "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
             "content": {
@@ -469,6 +620,16 @@
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           },
           "403": {
             "description": "Forbidden"
@@ -489,8 +650,8 @@
         "tags": [
           "Customer onboarding"
         ],
-        "summary": "Provide customer's document page",
-        "operationId": "createDocumentPage",
+        "summary": "Provide customer\u0027s document page",
+        "operationId": "createDocumentPage_1",
         "parameters": [
           {
             "name": "id",
@@ -511,7 +672,6 @@
             "application/octet-stream": {
               "schema": {
                 "type": "string",
-                "description": "The data bytes as Base64 encoded string.",
                 "format": "byte"
               }
             }
@@ -525,8 +685,8 @@
           "403": {
             "description": "Forbidden"
           },
-          "404": {
-            "description": "Not found\n\nPossible error codes:\n - NOT_FOUND",
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
             "content": {
               "application/json": {
                 "schema": {
@@ -535,8 +695,18 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+          "400": {
+            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID\n - INVALID_REQUEST_BODY\n - INVALID_IMAGE",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found\n\nPossible error codes:\n - NOT_FOUND",
             "content": {
               "application/json": {
                 "schema": {
@@ -551,16 +721,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CreateDocumentPageResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID\n - INVALID_REQUEST_BODY\n - INVALID_IMAGE",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -695,7 +855,7 @@
           "Face operations"
         ],
         "summary": "Create a face from the photo (face detection)",
-        "operationId": "detect",
+        "operationId": "detect_1",
         "requestBody": {
           "content": {
             "application/json": {
@@ -706,7 +866,6 @@
             "application/octet-stream": {
               "schema": {
                 "type": "string",
-                "description": "The data bytes as Base64 encoded string.",
                 "format": "byte"
               }
             }
@@ -720,8 +879,8 @@
           "403": {
             "description": "Forbidden"
           },
-          "404": {
-            "description": "Not found\n\nPossible error codes:\n - NOT_FOUND",
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
             "content": {
               "application/json": {
                 "schema": {
@@ -730,8 +889,18 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+          "400": {
+            "description": "Bad request\n\nPossible error codes:\n - INVALID_REQUEST_BODY\n - INVALID_IMAGE\n - FACE_SIZE_MEMORY_LIMIT",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found\n\nPossible error codes:\n - NOT_FOUND",
             "content": {
               "application/json": {
                 "schema": {
@@ -746,16 +915,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CreateFaceResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request\n\nPossible error codes:\n - INVALID_REQUEST_BODY\n - INVALID_IMAGE\n - FACE_SIZE_MEMORY_LIMIT",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -796,8 +955,8 @@
           "required": true
         },
         "responses": {
-          "404": {
-            "description": "Not found\n\nPossible error codes:\n - NOT_FOUND",
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
             "content": {
               "application/json": {
                 "schema": {
@@ -806,8 +965,11 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found\n\nPossible error codes:\n - NOT_FOUND",
             "content": {
               "application/json": {
                 "schema": {
@@ -826,8 +988,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized"
+          "403": {
+            "description": "Forbidden"
           },
           "400": {
             "description": "Bad request\n\nPossible error codes:\n - INVALID_REQUEST_BODY\n - INVALID_IMAGE\n - UNSUPPORTED_VERSION_TEMPLATE\n - CORRUPTED_TEMPLATE\n - INCOMPATIBLE_TEMPLATE",
@@ -838,9 +1000,6 @@
                 }
               }
             }
-          },
-          "403": {
-            "description": "Forbidden"
           }
         },
         "security": [
@@ -868,6 +1027,12 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
           "200": {
             "description": "OK",
             "content": {
@@ -877,12 +1042,6 @@
                 }
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
           }
         },
         "security": [
@@ -910,22 +1069,12 @@
           }
         ],
         "responses": {
-          "400": {
-            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID",
+          "200": {
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found\n\nPossible error codes:\n - NOT_FOUND",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/GetCustomerResponse"
                 }
               }
             }
@@ -943,12 +1092,22 @@
           "401": {
             "description": "Unauthorized"
           },
-          "200": {
-            "description": "OK",
+          "400": {
+            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetCustomerResponse"
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found\n\nPossible error codes:\n - NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -980,6 +1139,19 @@
           }
         ],
         "responses": {
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
           "400": {
             "description": "Bad request\n\nPossible error codes:\n - INVALID_ID",
             "content": {
@@ -990,12 +1162,15 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+          "403": {
+            "description": "Forbidden"
+          },
+          "200": {
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/CreateCustomerResponse"
                 }
               }
             }
@@ -1009,22 +1184,6 @@
                 }
               }
             }
-          },
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CreateCustomerResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
           }
         },
         "security": [
@@ -1050,16 +1209,6 @@
           }
         ],
         "responses": {
-          "400": {
-            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
           "500": {
             "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
             "content": {
@@ -1072,6 +1221,16 @@
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           },
           "403": {
             "description": "Forbidden"
@@ -1115,6 +1274,19 @@
           "required": true
         },
         "responses": {
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
           "400": {
             "description": "Bad request\n\nPossible error codes:\n - INVALID_ID\n - INVALID_REQUEST_BODY",
             "content": {
@@ -1135,18 +1307,8 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
+          "403": {
+            "description": "Forbidden"
           },
           "409": {
             "description": "Conflict\n\nPossible error codes:\n - CONFLICT",
@@ -1157,9 +1319,6 @@
                 }
               }
             }
-          },
-          "403": {
-            "description": "Forbidden"
           },
           "204": {
             "description": "No Content"
@@ -1177,7 +1336,7 @@
         "tags": [
           "Customer onboarding"
         ],
-        "summary": "Provide customer's liveness selfie",
+        "summary": "Provide customer\u0027s liveness selfie",
         "operationId": "createLivenessSelfie",
         "parameters": [
           {
@@ -1200,12 +1359,12 @@
           "required": true
         },
         "responses": {
-          "404": {
-            "description": "Not found\n\nPossible error codes:\n - NOT_FOUND",
+          "200": {
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/CreateCustomerLivenessSelfieResponse"
                 }
               }
             }
@@ -1220,8 +1379,80 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized"
+          },
           "400": {
             "description": "Bad request\n\nPossible error codes:\n - INVALID_ID\n - INVALID_REQUEST_BODY\n - INVALID_IMAGE",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found\n\nPossible error codes:\n - NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "409": {
+            "description": "Conflict\n\nPossible error codes:\n - CONFLICT",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api": []
+          }
+        ]
+      }
+    },
+    "/api/v1/customers/{id}/liveness/selfies/retrieve": {
+      "post": {
+        "tags": [
+          "Customer onboarding"
+        ],
+        "summary": "Retrieves customer\u0027s liveness selfies and liveness record selfies of given LivenessType",
+        "operationId": "retrieveLivenessSelfiesAndRecords",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RetrieveLivenessSelfiesRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
             "content": {
               "application/json": {
                 "schema": {
@@ -1233,12 +1464,35 @@
           "401": {
             "description": "Unauthorized"
           },
+          "400": {
+            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID\n - INVALID_REQUEST_BODY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found\n\nPossible error codes:\n - NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
           "200": {
             "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreateCustomerLivenessSelfieResponse"
+                  "$ref": "#/components/schemas/RetrieveLivenessSelfiesResponse"
                 }
               }
             }
@@ -1252,9 +1506,6 @@
                 }
               }
             }
-          },
-          "403": {
-            "description": "Forbidden"
           }
         },
         "security": [
@@ -1269,7 +1520,7 @@
         "tags": [
           "Customer onboarding"
         ],
-        "summary": "Provide customer's liveness record",
+        "summary": "Provide customer\u0027s liveness record",
         "operationId": "createLivenessRecord",
         "parameters": [
           {
@@ -1286,7 +1537,6 @@
             "application/octet-stream": {
               "schema": {
                 "type": "string",
-                "description": "The data bytes as Base64 encoded string.",
                 "format": "byte"
               }
             }
@@ -1294,12 +1544,12 @@
           "required": true
         },
         "responses": {
-          "404": {
-            "description": "Not found\n\nPossible error codes:\n - NOT_FOUND",
+          "200": {
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/CreateCustomerLivenessRecordResponse"
                 }
               }
             }
@@ -1314,6 +1564,9 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized"
+          },
           "400": {
             "description": "Bad request\n\nPossible error codes:\n - INVALID_ID\n - INVALID_REQUEST_BODY\n - INVALID_IMAGE",
             "content": {
@@ -1324,11 +1577,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "409": {
-            "description": "Conflict\n\nPossible error codes:\n - CONFLICT",
+          "404": {
+            "description": "Not found\n\nPossible error codes:\n - NOT_FOUND",
             "content": {
               "application/json": {
                 "schema": {
@@ -1340,12 +1590,12 @@
           "403": {
             "description": "Forbidden"
           },
-          "200": {
-            "description": "OK",
+          "409": {
+            "description": "Conflict\n\nPossible error codes:\n - CONFLICT",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreateCustomerLivenessRecordResponse"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -1363,7 +1613,7 @@
         "tags": [
           "Customer onboarding"
         ],
-        "summary": "Evaluate customer's liveness",
+        "summary": "Evaluate customer\u0027s liveness",
         "operationId": "evaluateLiveness",
         "parameters": [
           {
@@ -1386,6 +1636,19 @@
           "required": true
         },
         "responses": {
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
           "400": {
             "description": "Bad request\n\nPossible error codes:\n - INVALID_ID\n - INVALID_REQUEST_BODY",
             "content": {
@@ -1406,18 +1669,8 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
+          "403": {
+            "description": "Forbidden"
           },
           "200": {
             "description": "OK",
@@ -1438,9 +1691,6 @@
                 }
               }
             }
-          },
-          "403": {
-            "description": "Forbidden"
           }
         },
         "security": [
@@ -1468,6 +1718,19 @@
           }
         ],
         "responses": {
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
           "400": {
             "description": "Bad request\n\nPossible error codes:\n - INVALID_ID",
             "content": {
@@ -1488,29 +1751,6 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "409": {
-            "description": "Conflict\n\nPossible error codes:\n - CONFLICT",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
           "403": {
             "description": "Forbidden"
           },
@@ -1520,6 +1760,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CustomerInspectResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict\n\nPossible error codes:\n - CONFLICT",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -1550,6 +1800,19 @@
           }
         ],
         "responses": {
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
           "400": {
             "description": "Bad request\n\nPossible error codes:\n - INVALID_ID",
             "content": {
@@ -1570,15 +1833,8 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
+          "403": {
+            "description": "Forbidden"
           },
           "200": {
             "description": "OK",
@@ -1590,9 +1846,6 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized"
-          },
           "409": {
             "description": "Conflict\n\nPossible error codes:\n - CONFLICT",
             "content": {
@@ -1602,9 +1855,6 @@
                 }
               }
             }
-          },
-          "403": {
-            "description": "Forbidden"
           }
         },
         "security": [
@@ -1619,7 +1869,7 @@
         "tags": [
           "Customer onboarding"
         ],
-        "summary": "Inspect customer's document",
+        "summary": "Inspect customer\u0027s document",
         "operationId": "documentInspect",
         "parameters": [
           {
@@ -1632,6 +1882,29 @@
           }
         ],
         "responses": {
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentInspectResponse"
+                }
+              }
+            }
+          },
           "400": {
             "description": "Bad request\n\nPossible error codes:\n - INVALID_ID",
             "content": {
@@ -1652,18 +1925,8 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
+          "403": {
+            "description": "Forbidden"
           },
           "409": {
             "description": "Conflict\n\nPossible error codes:\n - CONFLICT",
@@ -1671,19 +1934,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DocumentInspectResponse"
                 }
               }
             }
@@ -1701,7 +1951,7 @@
         "tags": [
           "Customer onboarding"
         ],
-        "summary": "Disclose customer's document inspection",
+        "summary": "Disclose customer\u0027s document inspection",
         "operationId": "documentInspectDisclose",
         "parameters": [
           {
@@ -1714,15 +1964,18 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK",
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DocumentInspectDiscloseResponse"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "400": {
             "description": "Bad request\n\nPossible error codes:\n - INVALID_ID",
@@ -1744,18 +1997,18 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+          "200": {
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/DocumentInspectDiscloseResponse"
                 }
               }
             }
           },
-          "401": {
-            "description": "Unauthorized"
+          "403": {
+            "description": "Forbidden"
           },
           "409": {
             "description": "Conflict\n\nPossible error codes:\n - CONFLICT",
@@ -1766,9 +2019,6 @@
                 }
               }
             }
-          },
-          "403": {
-            "description": "Forbidden"
           }
         },
         "security": [
@@ -1796,6 +2046,12 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
           "200": {
             "description": "OK",
             "content": {
@@ -1805,12 +2061,6 @@
                 }
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
           }
         },
         "security": [
@@ -1825,7 +2075,7 @@
         "tags": [
           "Face operations"
         ],
-        "summary": "Get the face's quality",
+        "summary": "Get the face\u0027s quality",
         "operationId": "checkQuality",
         "parameters": [
           {
@@ -1838,6 +2088,29 @@
           }
         ],
         "responses": {
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FaceQualityResponse"
+                }
+              }
+            }
+          },
           "400": {
             "description": "Bad request\n\nPossible error codes:\n - INVALID_ID",
             "content": {
@@ -1857,29 +2130,6 @@
                 }
               }
             }
-          },
-          "500": {
-            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FaceQualityResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
           },
           "403": {
             "description": "Forbidden"
@@ -1910,6 +2160,29 @@
           }
         ],
         "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GlassesResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
           "400": {
             "description": "Bad request\n\nPossible error codes:\n - INVALID_ID",
             "content": {
@@ -1929,29 +2202,6 @@
                 }
               }
             }
-          },
-          "500": {
-            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GlassesResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
           },
           "403": {
             "description": "Forbidden"
@@ -1969,7 +2219,7 @@
         "tags": [
           "Face operations"
         ],
-        "summary": "Get the face's template",
+        "summary": "Get the face\u0027s template",
         "operationId": "createTemplate",
         "parameters": [
           {
@@ -1982,6 +2232,19 @@
           }
         ],
         "responses": {
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
           "400": {
             "description": "Bad request\n\nPossible error codes:\n - INVALID_ID",
             "content": {
@@ -2002,22 +2265,6 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
           "200": {
             "description": "OK",
             "content": {
@@ -2027,6 +2274,9 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Forbidden"
           }
         },
         "security": [
@@ -2054,6 +2304,19 @@
           }
         ],
         "responses": {
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
           "400": {
             "description": "Bad request\n\nPossible error codes:\n - INVALID_ID",
             "content": {
@@ -2073,19 +2336,6 @@
                 }
               }
             }
-          },
-          "500": {
-            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
           },
           "403": {
             "description": "Forbidden"
@@ -2113,7 +2363,7 @@
         "tags": [
           "Face operations"
         ],
-        "summary": "Get the face's crop",
+        "summary": "Get the face\u0027s crop",
         "operationId": "doCrop",
         "parameters": [
           {
@@ -2144,6 +2394,19 @@
           }
         ],
         "responses": {
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
           "404": {
             "description": "Not found\n\nPossible error codes:\n - NOT_FOUND",
             "content": {
@@ -2154,8 +2417,11 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+          "403": {
+            "description": "Forbidden"
+          },
+          "400": {
+            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID\n - INVALID_REQUEST_PARAMETER",
             "content": {
               "application/json": {
                 "schema": {
@@ -2173,22 +2439,6 @@
                 }
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "400": {
-            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID\n - INVALID_REQUEST_PARAMETER",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden"
           }
         },
         "security": [
@@ -2203,7 +2453,7 @@
         "tags": [
           "Face operations"
         ],
-        "summary": "Get the face's crop with removed background",
+        "summary": "Get the face\u0027s crop with removed background",
         "operationId": "doCropRemoveBackground",
         "parameters": [
           {
@@ -2234,6 +2484,19 @@
           }
         ],
         "responses": {
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
           "404": {
             "description": "Not found\n\nPossible error codes:\n - NOT_FOUND",
             "content": {
@@ -2244,8 +2507,11 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+          "403": {
+            "description": "Forbidden"
+          },
+          "400": {
+            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID\n - INVALID_REQUEST_PARAMETER",
             "content": {
               "application/json": {
                 "schema": {
@@ -2263,22 +2529,6 @@
                 }
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "400": {
-            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID\n - INVALID_REQUEST_PARAMETER",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden"
           }
         },
         "security": [
@@ -2293,7 +2543,7 @@
         "tags": [
           "Face operations"
         ],
-        "summary": "Get face's crop coordinates",
+        "summary": "Get face\u0027s crop coordinates",
         "operationId": "doCropCoordinates",
         "parameters": [
           {
@@ -2306,6 +2556,19 @@
           }
         ],
         "responses": {
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
           "400": {
             "description": "Bad request\n\nPossible error codes:\n - INVALID_ID",
             "content": {
@@ -2325,19 +2588,6 @@
                 }
               }
             }
-          },
-          "500": {
-            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
           },
           "403": {
             "description": "Forbidden"
@@ -2365,7 +2615,7 @@
         "tags": [
           "Face operations"
         ],
-        "summary": "Get face's aspects",
+        "summary": "Get face\u0027s aspects",
         "operationId": "evaluateAspects",
         "parameters": [
           {
@@ -2378,15 +2628,18 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK",
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FaceAspectsResponse"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "400": {
             "description": "Bad request\n\nPossible error codes:\n - INVALID_ID",
@@ -2408,21 +2661,18 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+          "403": {
+            "description": "Forbidden"
+          },
+          "200": {
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/FaceAspectsResponse"
                 }
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
           }
         },
         "security": [
@@ -2437,7 +2687,7 @@
         "tags": [
           "Customer onboarding"
         ],
-        "summary": "Get customer's liveness record's selfie",
+        "summary": "Get customer\u0027s liveness record\u0027s selfie",
         "operationId": "customerLivenessRecordSelfie",
         "parameters": [
           {
@@ -2476,6 +2726,19 @@
           }
         ],
         "responses": {
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
           "404": {
             "description": "Not found\n\nPossible error codes:\n - NOT_FOUND",
             "content": {
@@ -2486,8 +2749,11 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+          "403": {
+            "description": "Forbidden"
+          },
+          "400": {
+            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID\n - INVALID_REQUEST_PARAMETER",
             "content": {
               "application/json": {
                 "schema": {
@@ -2505,22 +2771,6 @@
                 }
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "400": {
-            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID\n - INVALID_REQUEST_PARAMETER",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden"
           }
         },
         "security": [
@@ -2535,7 +2785,7 @@
         "tags": [
           "Customer onboarding"
         ],
-        "summary": "Get customer's document signature",
+        "summary": "Get customer\u0027s document signature",
         "operationId": "documentSignature",
         "parameters": [
           {
@@ -2566,6 +2816,19 @@
           }
         ],
         "responses": {
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
           "404": {
             "description": "Not found\n\nPossible error codes:\n - NOT_FOUND",
             "content": {
@@ -2576,8 +2839,11 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+          "403": {
+            "description": "Forbidden"
+          },
+          "400": {
+            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID\n - INVALID_REQUEST_PARAMETER",
             "content": {
               "application/json": {
                 "schema": {
@@ -2595,22 +2861,6 @@
                 }
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "400": {
-            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID\n - INVALID_REQUEST_PARAMETER",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden"
           }
         },
         "security": [
@@ -2625,7 +2875,7 @@
         "tags": [
           "Customer onboarding"
         ],
-        "summary": "Get customer's document portrait",
+        "summary": "Get customer\u0027s document portrait",
         "operationId": "documentPortrait",
         "parameters": [
           {
@@ -2656,6 +2906,19 @@
           }
         ],
         "responses": {
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
           "404": {
             "description": "Not found\n\nPossible error codes:\n - NOT_FOUND",
             "content": {
@@ -2666,8 +2929,11 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+          "403": {
+            "description": "Forbidden"
+          },
+          "400": {
+            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID\n - INVALID_REQUEST_PARAMETER",
             "content": {
               "application/json": {
                 "schema": {
@@ -2685,22 +2951,6 @@
                 }
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "400": {
-            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID\n - INVALID_REQUEST_PARAMETER",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden"
           }
         },
         "security": [
@@ -2715,7 +2965,7 @@
         "tags": [
           "Customer onboarding"
         ],
-        "summary": "Get normalized image of the customer's document page",
+        "summary": "Get normalized image of the customer\u0027s document page",
         "operationId": "documentPageCrop",
         "parameters": [
           {
@@ -2754,6 +3004,19 @@
           }
         ],
         "responses": {
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
           "404": {
             "description": "Not found\n\nPossible error codes:\n - NOT_FOUND",
             "content": {
@@ -2764,8 +3027,11 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+          "403": {
+            "description": "Forbidden"
+          },
+          "400": {
+            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID\n - INVALID_REQUEST_PARAMETER",
             "content": {
               "application/json": {
                 "schema": {
@@ -2783,22 +3049,6 @@
                 }
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "400": {
-            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID\n - INVALID_REQUEST_PARAMETER",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden"
           }
         },
         "security": [
@@ -2813,7 +3063,7 @@
         "tags": [
           "Customer onboarding"
         ],
-        "summary": "Check quality of the customer's document page",
+        "summary": "Check quality of the customer\u0027s document page",
         "operationId": "documentPageQuality",
         "parameters": [
           {
@@ -2834,6 +3084,19 @@
           }
         ],
         "responses": {
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
           "400": {
             "description": "Bad request\n\nPossible error codes:\n - INVALID_ID",
             "content": {
@@ -2854,15 +3117,8 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
+          "403": {
+            "description": "Forbidden"
           },
           "200": {
             "description": "OK",
@@ -2873,12 +3129,6 @@
                 }
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
           }
         },
         "security": [
@@ -2893,7 +3143,7 @@
         "tags": [
           "Customer onboarding"
         ],
-        "summary": "Get customer's document ghost portrait",
+        "summary": "Get customer\u0027s document ghost portrait",
         "operationId": "documentGhostPortrait",
         "parameters": [
           {
@@ -2924,6 +3174,19 @@
           }
         ],
         "responses": {
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
           "404": {
             "description": "Not found\n\nPossible error codes:\n - NOT_FOUND",
             "content": {
@@ -2934,8 +3197,11 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+          "403": {
+            "description": "Forbidden"
+          },
+          "400": {
+            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID\n - INVALID_REQUEST_PARAMETER",
             "content": {
               "application/json": {
                 "schema": {
@@ -2953,22 +3219,6 @@
                 }
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "400": {
-            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID\n - INVALID_REQUEST_PARAMETER",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden"
           }
         },
         "security": [
@@ -2983,7 +3233,7 @@
         "tags": [
           "Customer onboarding"
         ],
-        "summary": "Get customer's fingerprint from the document",
+        "summary": "Get customer\u0027s fingerprint from the document",
         "operationId": "documentFingerprint",
         "parameters": [
           {
@@ -3014,6 +3264,19 @@
           }
         ],
         "responses": {
+          "500": {
+            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
           "404": {
             "description": "Not found\n\nPossible error codes:\n - NOT_FOUND",
             "content": {
@@ -3024,8 +3287,11 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
+          "403": {
+            "description": "Forbidden"
+          },
+          "400": {
+            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID\n - INVALID_REQUEST_PARAMETER",
             "content": {
               "application/json": {
                 "schema": {
@@ -3043,22 +3309,6 @@
                 }
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "400": {
-            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID\n - INVALID_REQUEST_PARAMETER",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden"
           }
         },
         "security": [
@@ -3086,16 +3336,6 @@
           }
         ],
         "responses": {
-          "400": {
-            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
           "500": {
             "description": "Internal Server Error\n\nPossible error codes:\n - UNEXPECTED_ERROR",
             "content": {
@@ -3108,6 +3348,16 @@
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Bad request\n\nPossible error codes:\n - INVALID_ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           },
           "403": {
             "description": "Forbidden"
@@ -3264,12 +3514,11 @@
         "properties": {
           "data": {
             "type": "string",
-            "description": "The data bytes as Base64 encoded string.",
             "format": "byte"
           },
           "url": {
             "type": "string",
-            "description": "Image's URL",
+            "description": "Image\u0027s URL",
             "example": "http://localhost/example.png"
           }
         },
@@ -3312,15 +3561,19 @@
               "CONFLICT",
               "UNEXPECTED_ERROR",
               "ALREADY_EXISTS",
+              "DATA_DOWNLOADER_DISABLED",
+              "MALFORMED_URL",
               "FACE_SIZE_MEMORY_LIMIT",
               "INCOMPATIBLE_TEMPLATE",
               "CORRUPTED_TEMPLATE",
-              "UNSUPPORTED_VERSION_TEMPLATE"
+              "UNSUPPORTED_VERSION_TEMPLATE",
+              "DATA_DOWNLOAD_ERROR",
+              "NOT_ENOUGH_DATA"
             ]
           },
           "errorMessage": {
             "type": "string",
-            "description": "Error detailed description. It's only informative.",
+            "description": "Error detailed description. It\u0027s only informative.",
             "readOnly": true
           }
         },
@@ -3341,7 +3594,8 @@
             "description": "The face detection error code",
             "readOnly": true,
             "enum": [
-              "NO_FACE_DETECTED"
+              "NO_FACE_DETECTED",
+              "INVALID_DATA"
             ]
           },
           "warnings": {
@@ -3391,11 +3645,11 @@
         "properties": {
           "self": {
             "type": "string",
-            "description": "The resource's self link.",
+            "description": "The resource\u0027s self link.",
             "readOnly": true
           }
         },
-        "description": "The resource's links",
+        "description": "The resource\u0027s links",
         "readOnly": true
       },
       "Point": {
@@ -3456,6 +3710,71 @@
         "properties": {
           "links": {
             "$ref": "#/components/schemas/Links"
+          }
+        },
+        "readOnly": true
+      },
+      "LivenessChallengeRequest": {
+        "required": [
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Liveness type for the challenge.",
+            "enum": [
+              "EYE_GAZE_LIVENESS",
+              "PASSIVE_LIVENESS",
+              "SMILE_LIVENESS",
+              "MAGNIFEYE_LIVENESS"
+            ]
+          }
+        },
+        "writeOnly": true
+      },
+      "ChallengeDetails": {
+        "type": "object",
+        "readOnly": true,
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/EyeGazeChallengeDetails"
+          }
+        ]
+      },
+      "EyeGazeChallengeDetails": {
+        "required": [
+          "corners"
+        ],
+        "type": "object",
+        "properties": {
+          "corners": {
+            "type": "array",
+            "description": "The list of corners - Eye Gaze Positions.",
+            "readOnly": true,
+            "items": {
+              "type": "string",
+              "description": "The list of corners - Eye Gaze Positions.",
+              "readOnly": true,
+              "enum": [
+                "TOP_LEFT",
+                "TOP_RIGHT",
+                "BOTTOM_LEFT",
+                "BOTTOM_RIGHT"
+              ]
+            }
+          }
+        },
+        "description": "The liveness challenge details for the liveness."
+      },
+      "LivenessChallengeResponse": {
+        "required": [
+          "details"
+        ],
+        "type": "object",
+        "properties": {
+          "details": {
+            "$ref": "#/components/schemas/ChallengeDetails"
           }
         },
         "readOnly": true
@@ -3620,7 +3939,7 @@
           },
           "pageType": {
             "type": "string",
-            "description": "Document's page type",
+            "description": "Document\u0027s page type",
             "readOnly": true,
             "example": "front"
           },
@@ -3633,7 +3952,8 @@
             "readOnly": true,
             "enum": [
               "NO_CARD_CORNERS_DETECTED",
-              "PAGE_DOESNT_MATCH_DOCUMENT_TYPE_OF_PREVIOUS_PAGE"
+              "PAGE_DOESNT_MATCH_DOCUMENT_TYPE_OF_PREVIOUS_PAGE",
+              "INVALID_DATA"
             ]
           },
           "warnings": {
@@ -3645,6 +3965,9 @@
               "description": "The document page processing warnings",
               "readOnly": true,
               "enum": [
+                "PORTRAIT_NOT_GUARANTEED_OF_THE_SAME_PERSON",
+                "MISSING_FRONT_PAGE",
+                "MISSING_BACK_PAGE",
                 "DOCUMENT_TYPE_NOT_RECOGNIZED"
               ]
             }
@@ -3677,24 +4000,30 @@
             "$ref": "#/components/schemas/Point"
           }
         },
-        "description": "The document's position in the image. The position is defined by document corner's coordinates.",
+        "description": "The document\u0027s position in the image. The position is defined by document corner\u0027s coordinates.",
         "readOnly": true
       },
       "DocumentDetection": {
         "required": [
           "confidence",
-          "coordinates"
+          "coordinates",
+          "cornerOutOfImage"
         ],
         "type": "object",
         "properties": {
           "confidence": {
             "type": "number",
-            "description": "The document's detection confidence.",
+            "description": "The document\u0027s detection confidence.",
             "format": "double",
             "example": 0.8
           },
           "coordinates": {
             "$ref": "#/components/schemas/DocumentCoordinates"
+          },
+          "cornerOutOfImage": {
+            "type": "boolean",
+            "description": "True if document corners are out of image",
+            "readOnly": true
           }
         },
         "readOnly": true
@@ -3738,7 +4067,7 @@
         "properties": {
           "timeout": {
             "type": "integer",
-            "description": "The session's timeout in seconds.",
+            "description": "The session\u0027s timeout in seconds.",
             "format": "int32",
             "writeOnly": true,
             "example": 600
@@ -3754,7 +4083,7 @@
         "properties": {
           "token": {
             "type": "string",
-            "description": "The session's token as Base64 encoded string",
+            "description": "The session\u0027s token as Base64 encoded string",
             "readOnly": true
           }
         },
@@ -3845,7 +4174,7 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "The face's ID",
+            "description": "The face\u0027s ID",
             "readOnly": true
           },
           "detection": {
@@ -3860,7 +4189,8 @@
             "readOnly": true,
             "enum": [
               "MULTIPLE_FACES_DETECTED",
-              "NO_FACE_DETECTED"
+              "NO_FACE_DETECTED",
+              "INVALID_DATA"
             ]
           },
           "warnings": {
@@ -3889,7 +4219,6 @@
           },
           "referenceFaceTemplate": {
             "type": "string",
-            "description": "The data bytes as Base64 encoded string.",
             "format": "byte"
           }
         },
@@ -3922,7 +4251,7 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "The customer's ID",
+            "description": "The customer\u0027s ID",
             "readOnly": true
           },
           "links": {
@@ -3940,7 +4269,7 @@
           "externalId": {
             "pattern": "^[a-zA-Z\\d._-]{1,64}$",
             "type": "string",
-            "description": "External identifier of the customer (for pairing between Trust Platform and external database), limited to alphanumeric, '.', '-' and '_' characters and maximum length of 64. If not supplied, the UUID of the customer present in the request URL is used instead.",
+            "description": "External identifier of the customer (for pairing between Trust Platform and external database), limited to alphanumeric, \u0027.\u0027, \u0027-\u0027 and \u0027_\u0027 characters and maximum length of 64. If not supplied, the UUID of the customer present in the request URL is used instead.",
             "writeOnly": true,
             "example": "55bd71d3-12cc-4c15-accd-b6dc8702bf3b"
           },
@@ -3970,7 +4299,7 @@
           },
           "assertion": {
             "type": "string",
-            "description": "Definition of the active liveness challenge that the customer's face has to display in the provided selfie photo. E.g. if it is expected that the face is looking to top left corner of the screen, assertion EYE_GAZE_TOP_LEFT has to be used.",
+            "description": "Definition of the active liveness challenge that the customer\u0027s face has to display in the provided selfie photo. E.g. if it is expected that the face is looking to top left corner of the screen, assertion EYE_GAZE_TOP_LEFT has to be used.",
             "example": "EYE_GAZE_TOP_LEFT",
             "enum": [
               "EYE_GAZE_TOP_LEFT",
@@ -4028,6 +4357,99 @@
         },
         "readOnly": true
       },
+      "RetrieveLivenessSelfiesRequest": {
+        "required": [
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Describes which type of liveness selfies and record liveness selfies should be returned",
+            "writeOnly": true,
+            "enum": [
+              "EYE_GAZE_LIVENESS",
+              "PASSIVE_LIVENESS",
+              "SMILE_LIVENESS",
+              "MAGNIFEYE_LIVENESS"
+            ]
+          }
+        }
+      },
+      "LivenessRecordSelfie": {
+        "required": [
+          "assertion",
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "assertion": {
+            "type": "string",
+            "enum": [
+              "EYE_GAZE_TOP_LEFT",
+              "EYE_GAZE_TOP_RIGHT",
+              "EYE_GAZE_BOTTOM_LEFT",
+              "EYE_GAZE_BOTTOM_RIGHT",
+              "SMILE",
+              "NEUTRAL",
+              "NONE",
+              "MAGNIFEYE"
+            ]
+          },
+          "data": {
+            "type": "string",
+            "format": "byte"
+          }
+        },
+        "description": "Liveness record selfies uploaded via [/liveness/records](#tag/Customer-onboarding/operation/createLivenessRecord) endpoint",
+        "readOnly": true
+      },
+      "LivenessSelfie": {
+        "required": [
+          "assertion",
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "assertion": {
+            "type": "string",
+            "enum": [
+              "EYE_GAZE_TOP_LEFT",
+              "EYE_GAZE_TOP_RIGHT",
+              "EYE_GAZE_BOTTOM_LEFT",
+              "EYE_GAZE_BOTTOM_RIGHT",
+              "SMILE",
+              "NEUTRAL",
+              "NONE"
+            ]
+          },
+          "data": {
+            "type": "string",
+            "format": "byte"
+          }
+        },
+        "description": "Liveness selfies uploaded via [/liveness/selfies](#tag/Customer-onboarding/operation/createLivenessSelfie) endpoint",
+        "readOnly": true
+      },
+      "RetrieveLivenessSelfiesResponse": {
+        "type": "object",
+        "properties": {
+          "selfies": {
+            "type": "array",
+            "readOnly": true,
+            "items": {
+              "$ref": "#/components/schemas/LivenessSelfie"
+            }
+          },
+          "recordSelfies": {
+            "type": "array",
+            "readOnly": true,
+            "items": {
+              "$ref": "#/components/schemas/LivenessRecordSelfie"
+            }
+          }
+        }
+      },
       "CreateCustomerLivenessRecordResponse": {
         "type": "object",
         "properties": {
@@ -4055,11 +4477,11 @@
         "properties": {
           "selfie": {
             "type": "string",
-            "description": "The resource's selfie link.",
+            "description": "The resource\u0027s selfie link.",
             "readOnly": true
           }
         },
-        "description": "The resource's links",
+        "description": "The resource\u0027s links",
         "readOnly": true
       },
       "SelfieFromLivenessRecord": {
@@ -4142,11 +4564,11 @@
         "properties": {
           "documentInspection": {
             "type": "string",
-            "description": "The document's inspection link",
+            "description": "The document\u0027s inspection link",
             "readOnly": true
           }
         },
-        "description": "The customer's inspection links.",
+        "description": "The customer\u0027s inspection links.",
         "readOnly": true
       },
       "SecurityInspection": {
@@ -4159,7 +4581,7 @@
             "$ref": "#/components/schemas/VideoInjectionInspection"
           }
         },
-        "description": "The customer's security inspection.",
+        "description": "The customer\u0027s security inspection.",
         "readOnly": true
       },
       "SelfieAgeDifferenceWith": {
@@ -4167,18 +4589,18 @@
         "properties": {
           "documentPortrait": {
             "type": "integer",
-            "description": "The difference in years between the estimated age of a person in the selfie and the estimated age of a person in the document portrait. The age estimated based on the document portrait is adjusted by the age of the document. This attribute is available only if the document's issue date is available.",
+            "description": "The difference in years between the estimated age of a person in the selfie and the estimated age of a person in the document portrait. The age estimated based on the document portrait is adjusted by the age of the document. This attribute is available only if the document\u0027s issue date is available.",
             "format": "int32",
             "readOnly": true
           },
           "dateOfBirth": {
             "type": "integer",
-            "description": "Max difference in years between the estimated age of a person in the selfie and the age extracted from the document's visual zone and MRZ.",
+            "description": "Max difference in years between the estimated age of a person in the selfie and the age extracted from the document\u0027s visual zone and MRZ.",
             "format": "int32",
             "readOnly": true
           }
         },
-        "description": "Difference of the estimated age in years between the customer's selfie and other data extracted from ID document.",
+        "description": "Difference of the estimated age in years between the customer\u0027s selfie and other data extracted from ID document.",
         "readOnly": true
       },
       "SelfieInspection": {
@@ -4213,7 +4635,7 @@
             "example": false
           }
         },
-        "description": "Results of the inspection of customer's selfie versus document. Please, read the chapter \"Trust Factors\" of the DOT documentation.",
+        "description": "Results of the inspection of customer\u0027s selfie versus document. Please, read the chapter \"Trust Factors\" of the DOT documentation.",
         "readOnly": true
       },
       "SelfieInspectionGenderConsistency": {
@@ -4221,21 +4643,21 @@
         "properties": {
           "documentPortrait": {
             "type": "boolean",
-            "description": "True if selfie's gender is consistent with gender from the document's portrait",
+            "description": "True if selfie\u0027s gender is consistent with gender from the document\u0027s portrait",
             "readOnly": true
           },
           "viz": {
             "type": "boolean",
-            "description": "True if selfie's gender is consistent with gender from the document's visual zone",
+            "description": "True if selfie\u0027s gender is consistent with gender from the document\u0027s visual zone",
             "readOnly": true
           },
           "mrz": {
             "type": "boolean",
-            "description": "True if selfie's gender is consistent with gender from the document's MRZ",
+            "description": "True if selfie\u0027s gender is consistent with gender from the document\u0027s MRZ",
             "readOnly": true
           }
         },
-        "description": "Consistency of estimated gender on the selfie with customer's data extracted from ID document.",
+        "description": "Consistency of estimated gender on the selfie with customer\u0027s data extracted from ID document.",
         "readOnly": true
       },
       "SelfieSimilarityWith": {
@@ -4265,12 +4687,12 @@
         "properties": {
           "evaluated": {
             "type": "boolean",
-            "description": "True if video injection was evaluated on the customer's resources.",
+            "description": "True if video injection was evaluated on the customer\u0027s resources.",
             "readOnly": true
           },
           "detected": {
             "type": "boolean",
-            "description": "True if video injection was detected on the customer's resources.",
+            "description": "True if video injection was detected on the customer\u0027s resources.",
             "readOnly": true
           }
         },
@@ -4294,7 +4716,7 @@
         "properties": {
           "score": {
             "type": "number",
-            "description": "The resulting score of the similarity between the user's selfie and the document portrait.",
+            "description": "The resulting score of the similarity between the user\u0027s selfie and the document portrait.",
             "format": "float",
             "readOnly": true,
             "example": 0.955
@@ -4311,7 +4733,7 @@
         "properties": {
           "score": {
             "type": "number",
-            "description": "The resulting score represents the minimum similarity between the user's selfie and the liveness selfies.",
+            "description": "The resulting score represents the minimum similarity between the user\u0027s selfie and the liveness selfies.",
             "format": "float",
             "readOnly": true,
             "example": 0.955
@@ -4384,7 +4806,7 @@
         "properties": {
           "expired": {
             "type": "boolean",
-            "description": "True if the document is expired at the time of the customer's on-boarding. This attribute is available only if the document's expiry date is available.",
+            "description": "True if the document is expired at the time of the customer\u0027s on-boarding. This attribute is available only if the document\u0027s expiry date is available.",
             "readOnly": true,
             "example": false
           },
@@ -4405,7 +4827,7 @@
             "readOnly": true
           }
         },
-        "description": "Results of the inspection of customer's document. Please, read the chapter \"ID Document Authenticity Evaluation\" of the DOT documentation.",
+        "description": "Results of the inspection of customer\u0027s document. Please, read the chapter \"ID Document Authenticity Evaluation\" of the DOT documentation.",
         "readOnly": true
       },
       "MrzConsistency": {
@@ -4436,7 +4858,7 @@
         "properties": {
           "valid": {
             "type": "boolean",
-            "description": "True if the document's MRZ is valid. A valid MRZ has to match the specification and its checksums have to be correct.",
+            "description": "True if the document\u0027s MRZ is valid. A valid MRZ has to match the specification and its checksums have to be correct.",
             "readOnly": true,
             "example": true
           }
@@ -4533,7 +4955,7 @@
           },
           "mrz": {
             "type": "boolean",
-            "description": "True if the gender is consistent with the MRZ. Only available if the document's MRZ is available",
+            "description": "True if the gender is consistent with the MRZ. Only available if the document\u0027s MRZ is available",
             "readOnly": true,
             "example": true
           }
@@ -4549,7 +4971,7 @@
         "properties": {
           "consistent": {
             "type": "boolean",
-            "description": "True if the document's VIZ is consistent with other document data.",
+            "description": "True if the document\u0027s VIZ is consistent with other document data.",
             "readOnly": true,
             "example": true
           },
@@ -4645,7 +5067,7 @@
           "score": {
             "type": "number",
             "description": "The resulting score of the screenshot detection on the submitted document. The score is normalized to the interval from 0 to 1. Lower the score, higher the probability of the document being photographed from the screen.",
-            "format": "double",
+            "format": "float",
             "readOnly": true,
             "example": 0.1455
           }
@@ -4709,7 +5131,7 @@
             "additionalProperties": {
               "$ref": "#/components/schemas/PageMetadata"
             },
-            "description": "The map of document page's metadata. The map keys are page types.",
+            "description": "The map of document page\u0027s metadata. The map keys are page types.",
             "readOnly": true
           }
         },
@@ -4724,7 +5146,7 @@
         "properties": {
           "documents": {
             "type": "array",
-            "description": "The list of document's metadata",
+            "description": "The list of document\u0027s metadata",
             "readOnly": true,
             "items": {
               "$ref": "#/components/schemas/Document"
@@ -4740,6 +5162,11 @@
         ],
         "type": "object",
         "properties": {
+          "classificationAdviceRequired": {
+            "type": "boolean",
+            "description": "True if a precise classification advice is required when uploading the document page.",
+            "readOnly": true
+          },
           "portrait": {
             "$ref": "#/components/schemas/Portrait"
           },
@@ -4748,7 +5175,7 @@
             "additionalProperties": {
               "$ref": "#/components/schemas/TextField"
             },
-            "description": "The map of text field's metadata. The map keys are text field types.",
+            "description": "The map of text field\u0027s metadata. The map keys represent the text field types.",
             "readOnly": true
           }
         },
@@ -4804,19 +5231,19 @@
             "maximum": 1,
             "minimum": 0,
             "type": "number",
-            "description": "The face's attribute score",
+            "description": "The face\u0027s attribute score",
             "format": "double",
             "readOnly": true,
             "example": 0.24
           },
           "preconditionsMet": {
             "type": "boolean",
-            "description": "The flag indicates if the face's attribute score is reliable.",
+            "description": "The flag indicates if the face\u0027s attribute score is reliable.",
             "readOnly": true,
             "example": true
           }
         },
-        "description": "The face's attribute",
+        "description": "The face\u0027s attribute",
         "readOnly": true
       },
       "FaceQualityResponse": {
@@ -4904,7 +5331,7 @@
           },
           "preconditionsMet": {
             "type": "boolean",
-            "description": "The flag indicates if the face's attribute score is reliable.",
+            "description": "The flag indicates if the face\u0027s attribute score is reliable.",
             "readOnly": true,
             "example": true
           }
@@ -4953,7 +5380,6 @@
         "properties": {
           "data": {
             "type": "string",
-            "description": "The data bytes as Base64 encoded string.",
             "format": "byte",
             "readOnly": true
           },
@@ -4993,7 +5419,6 @@
         "properties": {
           "data": {
             "type": "string",
-            "description": "The data bytes as Base64 encoded string.",
             "format": "byte",
             "readOnly": true
           }
@@ -5053,7 +5478,6 @@
         "properties": {
           "data": {
             "type": "string",
-            "description": "The data bytes as Base64 encoded string.",
             "format": "byte",
             "readOnly": true
           },
@@ -5072,22 +5496,22 @@
         "properties": {
           "visualZone": {
             "type": "string",
-            "description": "The attribute value obtained from the document's visual zone.",
+            "description": "The attribute value obtained from the document\u0027s visual zone.",
             "readOnly": true
           },
           "visualZoneDuplicates": {
             "type": "array",
-            "description": "The attribute is a duplicated field type on the document, the value is obtained from the document's visual zone.",
+            "description": "The attribute is a duplicated field type on the document, the value is obtained from the document\u0027s visual zone.",
             "readOnly": true,
             "items": {
               "type": "string",
-              "description": "The attribute is a duplicated field type on the document, the value is obtained from the document's visual zone.",
+              "description": "The attribute is a duplicated field type on the document, the value is obtained from the document\u0027s visual zone.",
               "readOnly": true
             }
           },
           "mrz": {
             "type": "string",
-            "description": "The attribute value obtained from the document's machine readable zone.",
+            "description": "The attribute value obtained from the document\u0027s machine readable zone.",
             "readOnly": true
           },
           "selfie": {
@@ -5097,7 +5521,7 @@
           },
           "documentPortrait": {
             "type": "string",
-            "description": "The attribute value obtained from the document's portrait.",
+            "description": "The attribute value obtained from the document\u0027s portrait.",
             "readOnly": true
           }
         },
@@ -5153,11 +5577,11 @@
           },
           "pageTypes": {
             "type": "array",
-            "description": "Document's page types",
+            "description": "Document\u0027s page types",
             "readOnly": true,
             "items": {
               "type": "string",
-              "description": "Document's page types",
+              "description": "Document\u0027s page types",
               "readOnly": true
             }
           },
@@ -5199,7 +5623,7 @@
             "$ref": "#/components/schemas/CustomerDocumentLinks"
           }
         },
-        "description": "Details of the customer's document retrieved by OCR from ID document photo. The dates are in format YYYY-MM-DD.",
+        "description": "Details of the customer\u0027s document retrieved by OCR from ID document photo. The dates are in format YYYY-MM-DD.",
         "readOnly": true
       },
       "CustomerDocumentLinks": {
@@ -5207,36 +5631,36 @@
         "properties": {
           "portrait": {
             "type": "string",
-            "description": "The document's portrait link",
+            "description": "The document\u0027s portrait link",
             "readOnly": true
           },
           "ghostPortrait": {
             "type": "string",
-            "description": "The document's ghost portrait link",
+            "description": "The document\u0027s ghost portrait link",
             "readOnly": true
           },
           "signature": {
             "type": "string",
-            "description": "The document's signature image link",
+            "description": "The document\u0027s signature image link",
             "readOnly": true
           },
           "fingerprint": {
             "type": "string",
-            "description": "The document's fingerprint image link",
+            "description": "The document\u0027s fingerprint image link",
             "readOnly": true
           },
           "pages": {
             "type": "object",
             "additionalProperties": {
               "type": "string",
-              "description": "The map of links to the document's pages. The map keys are page types.",
+              "description": "The map of links to the document\u0027s pages. The map keys are page types.",
               "readOnly": true
             },
-            "description": "The map of links to the document's pages. The map keys are page types.",
+            "description": "The map of links to the document\u0027s pages. The map keys are page types.",
             "readOnly": true
           }
         },
-        "description": "Links to cropped images from the customer's document.",
+        "description": "Links to cropped images from the customer\u0027s document.",
         "readOnly": true
       },
       "GetCustomerResponse": {
@@ -5269,27 +5693,27 @@
         "properties": {
           "visualZone": {
             "type": "string",
-            "description": "The attribute value obtained from the document's visual zone.",
+            "description": "The attribute value obtained from the document\u0027s visual zone.",
             "readOnly": true
           },
           "visualZoneDuplicates": {
             "type": "array",
-            "description": "The attribute is a duplicated field type on the document, the value is obtained from the document's visual zone.",
+            "description": "The attribute is a duplicated field type on the document, the value is obtained from the document\u0027s visual zone.",
             "readOnly": true,
             "items": {
               "type": "string",
-              "description": "The attribute is a duplicated field type on the document, the value is obtained from the document's visual zone.",
+              "description": "The attribute is a duplicated field type on the document, the value is obtained from the document\u0027s visual zone.",
               "readOnly": true
             }
           },
           "mrz": {
             "type": "string",
-            "description": "The attribute value obtained from the document's machine readable zone.",
+            "description": "The attribute value obtained from the document\u0027s machine readable zone.",
             "readOnly": true
           },
           "barcode": {
             "type": "string",
-            "description": "The attribute value obtained from the document's barcode.",
+            "description": "The attribute value obtained from the document\u0027s barcode.",
             "readOnly": true
           }
         },
@@ -5301,22 +5725,22 @@
         "properties": {
           "visualZone": {
             "type": "string",
-            "description": "The attribute value obtained from the document's visual zone.",
+            "description": "The attribute value obtained from the document\u0027s visual zone.",
             "readOnly": true
           },
           "visualZoneDuplicates": {
             "type": "array",
-            "description": "The attribute is a duplicated field type on the document, the value is obtained from the document's visual zone.",
+            "description": "The attribute is a duplicated field type on the document, the value is obtained from the document\u0027s visual zone.",
             "readOnly": true,
             "items": {
               "type": "string",
-              "description": "The attribute is a duplicated field type on the document, the value is obtained from the document's visual zone.",
+              "description": "The attribute is a duplicated field type on the document, the value is obtained from the document\u0027s visual zone.",
               "readOnly": true
             }
           },
           "barcode": {
             "type": "string",
-            "description": "The attribute value obtained from the document's barcode.",
+            "description": "The attribute value obtained from the document\u0027s barcode.",
             "readOnly": true
           }
         },
@@ -5340,55 +5764,55 @@
         "properties": {
           "documentCode": {
             "type": "string",
-            "description": "Document's code",
+            "description": "Document\u0027s code",
             "readOnly": true,
             "example": "P"
           },
           "issuingAuthority": {
             "type": "string",
-            "description": "Document's issuing authority",
+            "description": "Document\u0027s issuing authority",
             "readOnly": true,
             "example": "SVK"
           },
           "surname": {
             "type": "string",
-            "description": "Holder's surname",
+            "description": "Holder\u0027s surname",
             "readOnly": true,
             "example": "DOE"
           },
           "givenNames": {
             "type": "string",
-            "description": "Holder's given names",
+            "description": "Holder\u0027s given names",
             "readOnly": true,
             "example": "JOHN"
           },
           "documentNumber": {
             "type": "string",
-            "description": "Document's number",
+            "description": "Document\u0027s number",
             "readOnly": true,
             "example": "123456789"
           },
           "nationality": {
             "type": "string",
-            "description": "Holder's nationality",
+            "description": "Holder\u0027s nationality",
             "readOnly": true,
             "example": "SVK"
           },
           "dateOfBirth": {
             "type": "string",
-            "description": "Holder's date of the birth, format: `YYMMDD`",
+            "description": "Holder\u0027s date of the birth, format: `YYMMDD`",
             "readOnly": true,
             "example": "841102"
           },
           "gender": {
             "type": "string",
-            "description": "Holder's gender, format: `M` for male, `F` for female, empty string for undefined gender.",
+            "description": "Holder\u0027s gender, format: `M` for male, `F` for female, empty string for undefined gender.",
             "readOnly": true,
             "example": "M"
           },
           "dateOfExpiry": {
             "type": "string",
-            "description": "Document's date of the expiration, format: `YYMMDD`",
+            "description": "Document\u0027s date of the expiration, format: `YYMMDD`",
             "readOnly": true,
             "example": "261019"
           },
@@ -5422,25 +5846,25 @@
         "properties": {
           "documentNumberCheckDigitValid": {
             "type": "boolean",
-            "description": "Check digit's validity of the document's number",
+            "description": "Check digit\u0027s validity of the document\u0027s number",
             "readOnly": true,
             "example": true
           },
           "dateOfBirthCheckDigitValid": {
             "type": "boolean",
-            "description": "Check digit's validity of the holder's date of the birth",
+            "description": "Check digit\u0027s validity of the holder\u0027s date of the birth",
             "readOnly": true,
             "example": true
           },
           "dateOfExpiryCheckDigitValid": {
             "type": "boolean",
-            "description": "Check digit's validity of the holder's date of the expiration",
+            "description": "Check digit\u0027s validity of the holder\u0027s date of the expiration",
             "readOnly": true,
             "example": true
           },
           "compositeCheckDigitValid": {
             "type": "boolean",
-            "description": "Composite check digit's validity",
+            "description": "Composite check digit\u0027s validity",
             "readOnly": true,
             "example": true
           }
@@ -5465,55 +5889,55 @@
         "properties": {
           "documentCode": {
             "type": "string",
-            "description": "Document's code",
+            "description": "Document\u0027s code",
             "readOnly": true,
             "example": "P"
           },
           "issuingAuthority": {
             "type": "string",
-            "description": "Document's issuing authority",
+            "description": "Document\u0027s issuing authority",
             "readOnly": true,
             "example": "SVK"
           },
           "surname": {
             "type": "string",
-            "description": "Holder's surname",
+            "description": "Holder\u0027s surname",
             "readOnly": true,
             "example": "DOE"
           },
           "givenNames": {
             "type": "string",
-            "description": "Holder's given names",
+            "description": "Holder\u0027s given names",
             "readOnly": true,
             "example": "JOHN"
           },
           "documentNumber": {
             "type": "string",
-            "description": "Document's number",
+            "description": "Document\u0027s number",
             "readOnly": true,
             "example": "123456789"
           },
           "nationality": {
             "type": "string",
-            "description": "Holder's nationality",
+            "description": "Holder\u0027s nationality",
             "readOnly": true,
             "example": "SVK"
           },
           "dateOfBirth": {
             "type": "string",
-            "description": "Holder's date of the birth, format: `YYMMDD`",
+            "description": "Holder\u0027s date of the birth, format: `YYMMDD`",
             "readOnly": true,
             "example": "841102"
           },
           "gender": {
             "type": "string",
-            "description": "Holder's gender, format: `M` for male, `F` for female, empty string for undefined gender.",
+            "description": "Holder\u0027s gender, format: `M` for male, `F` for female, empty string for undefined gender.",
             "readOnly": true,
             "example": "M"
           },
           "dateOfExpiry": {
             "type": "string",
-            "description": "Document's date of the expiration, format: `YYMMDD`",
+            "description": "Document\u0027s date of the expiration, format: `YYMMDD`",
             "readOnly": true,
             "example": "261019"
           },
@@ -5541,25 +5965,25 @@
         "properties": {
           "documentNumberCheckDigitValid": {
             "type": "boolean",
-            "description": "Check digit's validity of the document's number",
+            "description": "Check digit\u0027s validity of the document\u0027s number",
             "readOnly": true,
             "example": true
           },
           "dateOfBirthCheckDigitValid": {
             "type": "boolean",
-            "description": "Check digit's validity of the holder's date of the birth",
+            "description": "Check digit\u0027s validity of the holder\u0027s date of the birth",
             "readOnly": true,
             "example": true
           },
           "dateOfExpiryCheckDigitValid": {
             "type": "boolean",
-            "description": "Check digit's validity of the holder's date of the expiration",
+            "description": "Check digit\u0027s validity of the holder\u0027s date of the expiration",
             "readOnly": true,
             "example": true
           },
           "compositeCheckDigitValid": {
             "type": "boolean",
-            "description": "Composite check digit's validity",
+            "description": "Composite check digit\u0027s validity",
             "readOnly": true,
             "example": true
           }
@@ -5584,61 +6008,61 @@
         "properties": {
           "documentCode": {
             "type": "string",
-            "description": "Document's code",
+            "description": "Document\u0027s code",
             "readOnly": true,
             "example": "P"
           },
           "issuingAuthority": {
             "type": "string",
-            "description": "Document's issuing authority",
+            "description": "Document\u0027s issuing authority",
             "readOnly": true,
             "example": "SVK"
           },
           "surname": {
             "type": "string",
-            "description": "Holder's surname",
+            "description": "Holder\u0027s surname",
             "readOnly": true,
             "example": "DOE"
           },
           "givenNames": {
             "type": "string",
-            "description": "Holder's given names",
+            "description": "Holder\u0027s given names",
             "readOnly": true,
             "example": "JOHN"
           },
           "documentNumber": {
             "type": "string",
-            "description": "Document's number",
+            "description": "Document\u0027s number",
             "readOnly": true,
             "example": "123456789"
           },
           "nationality": {
             "type": "string",
-            "description": "Holder's nationality",
+            "description": "Holder\u0027s nationality",
             "readOnly": true,
             "example": "SVK"
           },
           "dateOfBirth": {
             "type": "string",
-            "description": "Holder's date of the birth, format: `YYMMDD`",
+            "description": "Holder\u0027s date of the birth, format: `YYMMDD`",
             "readOnly": true,
             "example": "841102"
           },
           "gender": {
             "type": "string",
-            "description": "Holder's gender, format: `M` for male, `F` for female, empty string for undefined gender.",
+            "description": "Holder\u0027s gender, format: `M` for male, `F` for female, empty string for undefined gender.",
             "readOnly": true,
             "example": "M"
           },
           "dateOfExpiry": {
             "type": "string",
-            "description": "Document's date of the expiration, format: `YYMMDD`",
+            "description": "Document\u0027s date of the expiration, format: `YYMMDD`",
             "readOnly": true,
             "example": "261019"
           },
           "personalNumberOrOptionalDataSecondLine": {
             "type": "string",
-            "description": "Holder's personal number or other optional data",
+            "description": "Holder\u0027s personal number or other optional data",
             "readOnly": true,
             "example": "2222"
           },
@@ -5661,31 +6085,31 @@
         "properties": {
           "documentNumberCheckDigitValid": {
             "type": "boolean",
-            "description": "Check digit's validity of the document's number",
+            "description": "Check digit\u0027s validity of the document\u0027s number",
             "readOnly": true,
             "example": true
           },
           "dateOfBirthCheckDigitValid": {
             "type": "boolean",
-            "description": "Check digit's validity of the holder's date of the birth",
+            "description": "Check digit\u0027s validity of the holder\u0027s date of the birth",
             "readOnly": true,
             "example": true
           },
           "dateOfExpiryCheckDigitValid": {
             "type": "boolean",
-            "description": "Check digit's validity of the holder's date of the expiration",
+            "description": "Check digit\u0027s validity of the holder\u0027s date of the expiration",
             "readOnly": true,
             "example": true
           },
           "personalNumberCheckDigitValid": {
             "type": "boolean",
-            "description": "Check digit's validity of the holder's personal number",
+            "description": "Check digit\u0027s validity of the holder\u0027s personal number",
             "readOnly": true,
             "example": true
           },
           "compositeCheckDigitValid": {
             "type": "boolean",
-            "description": "Composite check digit's validity",
+            "description": "Composite check digit\u0027s validity",
             "readOnly": true,
             "example": true
           }

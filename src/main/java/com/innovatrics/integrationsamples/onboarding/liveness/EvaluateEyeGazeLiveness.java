@@ -2,7 +2,13 @@ package com.innovatrics.integrationsamples.onboarding.liveness;
 
 import com.innovatrics.dot.integrationsamples.disapi.ApiClient;
 import com.innovatrics.dot.integrationsamples.disapi.ApiException;
-import com.innovatrics.dot.integrationsamples.disapi.model.*;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateCustomerLivenessSelfieRequest;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateCustomerLivenessSelfieResponse;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateCustomerResponse;
+import com.innovatrics.dot.integrationsamples.disapi.model.CustomerOnboardingApi;
+import com.innovatrics.dot.integrationsamples.disapi.model.EvaluateCustomerLivenessRequest;
+import com.innovatrics.dot.integrationsamples.disapi.model.EvaluateCustomerLivenessResponse;
+import com.innovatrics.dot.integrationsamples.disapi.model.Image;
 import com.innovatrics.integrationsamples.Configuration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,8 +19,11 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 
-import static com.innovatrics.dot.integrationsamples.disapi.model.CreateCustomerLivenessSelfieRequest.AssertionEnum.*;
-import static com.innovatrics.dot.integrationsamples.disapi.model.EvaluateCustomerLivenessResponse.ErrorCodeEnum.*;
+import static com.innovatrics.dot.integrationsamples.disapi.model.CreateCustomerLivenessSelfieRequest.AssertionEnum.EYE_GAZE_BOTTOM_LEFT;
+import static com.innovatrics.dot.integrationsamples.disapi.model.CreateCustomerLivenessSelfieRequest.AssertionEnum.EYE_GAZE_BOTTOM_RIGHT;
+import static com.innovatrics.dot.integrationsamples.disapi.model.CreateCustomerLivenessSelfieRequest.AssertionEnum.EYE_GAZE_TOP_LEFT;
+import static com.innovatrics.dot.integrationsamples.disapi.model.EvaluateCustomerLivenessResponse.ErrorCodeEnum.INVALID_DATA;
+import static com.innovatrics.dot.integrationsamples.disapi.model.EvaluateCustomerLivenessResponse.ErrorCodeEnum.NOT_ENOUGH_DATA;
 
 /**
  * This example represents sample implementation of Eye Gaze Liveness (formerly called as Active Liveness) evaluation on Digital Identity Service (DIS).

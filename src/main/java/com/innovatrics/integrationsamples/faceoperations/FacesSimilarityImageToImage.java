@@ -2,7 +2,11 @@ package com.innovatrics.integrationsamples.faceoperations;
 
 import com.innovatrics.dot.integrationsamples.disapi.ApiClient;
 import com.innovatrics.dot.integrationsamples.disapi.ApiException;
-import com.innovatrics.dot.integrationsamples.disapi.model.*;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateFaceRequest;
+import com.innovatrics.dot.integrationsamples.disapi.model.FaceOperationsApi;
+import com.innovatrics.dot.integrationsamples.disapi.model.FaceSimilarityRequest;
+import com.innovatrics.dot.integrationsamples.disapi.model.FaceSimilarityResponse;
+import com.innovatrics.dot.integrationsamples.disapi.model.Image;
 import com.innovatrics.integrationsamples.Configuration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,8 +26,8 @@ public class FacesSimilarityImageToImage {
         final FaceOperationsApi faceApi = new FaceOperationsApi(client);
 
         try {
-            String probeFaceId = faceApi.detect(new CreateFaceRequest().image(new Image().url(configuration.SIMILARITY_REFERENCE_IMAGE_URL))).getId();
-            String referenceFaceLink = faceApi.detect(new CreateFaceRequest().image(new Image().url(configuration.SIMILARITY_REFERENCE_IMAGE_URL))).getLinks().getSelf();
+            String probeFaceId = faceApi.detect1(new CreateFaceRequest().image(new Image().url(configuration.SIMILARITY_REFERENCE_IMAGE_URL))).getId();
+            String referenceFaceLink = faceApi.detect1(new CreateFaceRequest().image(new Image().url(configuration.SIMILARITY_REFERENCE_IMAGE_URL))).getLinks().getSelf();
 
             FaceSimilarityResponse faceSimilarityResponse = faceApi.checkSimilarity(probeFaceId, new FaceSimilarityRequest().referenceFace(referenceFaceLink));
 

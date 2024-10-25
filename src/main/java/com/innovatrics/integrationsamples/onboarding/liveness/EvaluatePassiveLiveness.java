@@ -2,7 +2,13 @@ package com.innovatrics.integrationsamples.onboarding.liveness;
 
 import com.innovatrics.dot.integrationsamples.disapi.ApiClient;
 import com.innovatrics.dot.integrationsamples.disapi.ApiException;
-import com.innovatrics.dot.integrationsamples.disapi.model.*;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateCustomerLivenessSelfieRequest;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateCustomerLivenessSelfieResponse;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateCustomerResponse;
+import com.innovatrics.dot.integrationsamples.disapi.model.CustomerOnboardingApi;
+import com.innovatrics.dot.integrationsamples.disapi.model.EvaluateCustomerLivenessRequest;
+import com.innovatrics.dot.integrationsamples.disapi.model.EvaluateCustomerLivenessResponse;
+import com.innovatrics.dot.integrationsamples.disapi.model.Image;
 import com.innovatrics.integrationsamples.Configuration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,9 +16,10 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import static com.innovatrics.dot.integrationsamples.disapi.model.CreateCustomerLivenessSelfieResponse.ErrorCodeEnum.*;
-import static com.innovatrics.dot.integrationsamples.disapi.model.CreateCustomerLivenessSelfieResponse.WarningsEnum.*;
-import static com.innovatrics.dot.integrationsamples.disapi.model.EvaluateCustomerLivenessResponse.ErrorCodeEnum.*;
+import static com.innovatrics.dot.integrationsamples.disapi.model.CreateCustomerLivenessSelfieResponse.ErrorCodeEnum.NO_FACE_DETECTED;
+import static com.innovatrics.dot.integrationsamples.disapi.model.CreateCustomerLivenessSelfieResponse.WarningsEnum.LOW_QUALITY;
+import static com.innovatrics.dot.integrationsamples.disapi.model.CreateCustomerLivenessSelfieResponse.WarningsEnum.MULTIPLE_FACES_DETECTED;
+import static com.innovatrics.dot.integrationsamples.disapi.model.EvaluateCustomerLivenessResponse.ErrorCodeEnum.NOT_ENOUGH_DATA;
 
 /**
  * This example represents sample implementation of image Passive Liveness evaluation by Digital Identity Service (DIS).

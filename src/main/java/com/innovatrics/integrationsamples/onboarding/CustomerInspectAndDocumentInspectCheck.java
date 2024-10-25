@@ -2,7 +2,25 @@ package com.innovatrics.integrationsamples.onboarding;
 
 import com.innovatrics.dot.integrationsamples.disapi.ApiClient;
 import com.innovatrics.dot.integrationsamples.disapi.ApiException;
-import com.innovatrics.dot.integrationsamples.disapi.model.*;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateCustomerLivenessSelfieRequest;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateCustomerLivenessSelfieResponse;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateCustomerResponse;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateDocumentPageRequest;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateDocumentPageResponse;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateDocumentRequest;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateSelfieRequest;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateSelfieResponse;
+import com.innovatrics.dot.integrationsamples.disapi.model.Customer;
+import com.innovatrics.dot.integrationsamples.disapi.model.CustomerInspectResponse;
+import com.innovatrics.dot.integrationsamples.disapi.model.CustomerOnboardingApi;
+import com.innovatrics.dot.integrationsamples.disapi.model.DocumentAdvice;
+import com.innovatrics.dot.integrationsamples.disapi.model.DocumentClassificationAdvice;
+import com.innovatrics.dot.integrationsamples.disapi.model.DocumentInspectResponse;
+import com.innovatrics.dot.integrationsamples.disapi.model.EvaluateCustomerLivenessRequest;
+import com.innovatrics.dot.integrationsamples.disapi.model.EvaluateCustomerLivenessResponse;
+import com.innovatrics.dot.integrationsamples.disapi.model.Image;
+import com.innovatrics.dot.integrationsamples.disapi.model.PageTamperingInspection;
+import com.innovatrics.dot.integrationsamples.disapi.model.TextConsistentWith;
 import com.innovatrics.integrationsamples.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -121,7 +139,7 @@ public class CustomerInspectAndDocumentInspectCheck {
 
     private static void prepareAllDataForInspect(String customerId, CustomerOnboardingApi customerOnboardingApi) throws ApiException, URISyntaxException, IOException {
         LOG.info("Data preparation started.");
-        CreateSelfieResponse selfieResponse = customerOnboardingApi.createSelfie(customerId, new CreateSelfieRequest().image(new Image().data(getDetectionImage())));
+        CreateSelfieResponse selfieResponse = customerOnboardingApi.createSelfie1(customerId, new CreateSelfieRequest().image(new Image().data(getDetectionImage())));
         CreateSelfieResponse.ErrorCodeEnum selfieError = selfieResponse.getErrorCode();
         if (selfieError != null) {
             LOG.error(selfieError.getValue());
@@ -141,13 +159,13 @@ public class CustomerInspectAndDocumentInspectCheck {
         }
 
         customerOnboardingApi.createDocument(customerId, new CreateDocumentRequest().advice(new DocumentAdvice().classification(new DocumentClassificationAdvice().addCountriesItem("INO"))));
-        CreateDocumentPageResponse createDocumentResponseFront = customerOnboardingApi.createDocumentPage(customerId, new CreateDocumentPageRequest().image(new Image().data(getDocumentImage("document-front"))));
+        CreateDocumentPageResponse createDocumentResponseFront = customerOnboardingApi.createDocumentPage1(customerId, new CreateDocumentPageRequest().image(new Image().data(getDocumentImage("document-front"))));
         CreateDocumentPageResponse.ErrorCodeEnum documentFrontError = createDocumentResponseFront.getErrorCode();
         if (documentFrontError != null) {
             LOG.error(documentFrontError.getValue());
         }
 
-        CreateDocumentPageResponse createDocumentResponseBack = customerOnboardingApi.createDocumentPage(customerId, new CreateDocumentPageRequest().image(new Image().data(getDocumentImage("document-back"))));
+        CreateDocumentPageResponse createDocumentResponseBack = customerOnboardingApi.createDocumentPage1(customerId, new CreateDocumentPageRequest().image(new Image().data(getDocumentImage("document-back"))));
         CreateDocumentPageResponse.ErrorCodeEnum documentBackError = createDocumentResponseBack.getErrorCode();
         if (documentBackError != null) {
             LOG.error(documentBackError.getValue());

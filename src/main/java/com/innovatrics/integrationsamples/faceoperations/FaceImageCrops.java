@@ -2,7 +2,11 @@ package com.innovatrics.integrationsamples.faceoperations;
 
 import com.innovatrics.dot.integrationsamples.disapi.ApiClient;
 import com.innovatrics.dot.integrationsamples.disapi.ApiException;
-import com.innovatrics.dot.integrationsamples.disapi.model.*;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateFaceRequest;
+import com.innovatrics.dot.integrationsamples.disapi.model.CropCoordinatesResponse;
+import com.innovatrics.dot.integrationsamples.disapi.model.FaceOperationsApi;
+import com.innovatrics.dot.integrationsamples.disapi.model.Image;
+import com.innovatrics.dot.integrationsamples.disapi.model.ImageCrop;
 import com.innovatrics.integrationsamples.Configuration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,7 +32,7 @@ public class FaceImageCrops {
         final FaceOperationsApi faceApi = new FaceOperationsApi(client);
 
         try {
-            String faceId = faceApi.detect(new CreateFaceRequest().image(new Image().url(configuration.EXAMPLE_IMAGE_URL))).getId();
+            String faceId = faceApi.detect1(new CreateFaceRequest().image(new Image().url(configuration.EXAMPLE_IMAGE_URL))).getId();
             LOG.info("Face detected with id: " + faceId);
 
             CropCoordinatesResponse cropCoordinatesResponse = faceApi.doCropCoordinates(faceId);

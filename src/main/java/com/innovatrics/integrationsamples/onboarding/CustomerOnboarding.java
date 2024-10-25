@@ -2,7 +2,22 @@ package com.innovatrics.integrationsamples.onboarding;
 
 import com.innovatrics.dot.integrationsamples.disapi.ApiClient;
 import com.innovatrics.dot.integrationsamples.disapi.ApiException;
-import com.innovatrics.dot.integrationsamples.disapi.model.*;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateCustomerLivenessSelfieRequest;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateCustomerLivenessSelfieResponse;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateCustomerResponse;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateDocumentPageRequest;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateDocumentPageResponse;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateDocumentRequest;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateSelfieRequest;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateSelfieResponse;
+import com.innovatrics.dot.integrationsamples.disapi.model.Customer;
+import com.innovatrics.dot.integrationsamples.disapi.model.CustomerOnboardingApi;
+import com.innovatrics.dot.integrationsamples.disapi.model.DocumentAdvice;
+import com.innovatrics.dot.integrationsamples.disapi.model.DocumentClassificationAdvice;
+import com.innovatrics.dot.integrationsamples.disapi.model.EvaluateCustomerLivenessRequest;
+import com.innovatrics.dot.integrationsamples.disapi.model.EvaluateCustomerLivenessResponse;
+import com.innovatrics.dot.integrationsamples.disapi.model.Image;
+import com.innovatrics.dot.integrationsamples.disapi.model.ImageCrop;
 import com.innovatrics.integrationsamples.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +50,7 @@ public class CustomerOnboarding {
             String customerId = customerResponse.getId();
             LOG.info("Customer created with id: " + customerId);
 
-            CreateSelfieResponse selfieResponse = customerOnboardingApi.createSelfie(customerId, new CreateSelfieRequest().image(new Image().data(getDetectionImage())));
+            CreateSelfieResponse selfieResponse = customerOnboardingApi.createSelfie1(customerId, new CreateSelfieRequest().image(new Image().data(getDetectionImage())));
             CreateSelfieResponse.ErrorCodeEnum selfieError = selfieResponse.getErrorCode();
             if (selfieError != null) {
                 LOG.error(selfieError.getValue());
@@ -66,14 +81,14 @@ public class CustomerOnboarding {
             LOG.info("Passive liveness score: " + passiveLivenessResponse.getScore());
 
             customerOnboardingApi.createDocument(customerId, new CreateDocumentRequest().advice(new DocumentAdvice().classification(new DocumentClassificationAdvice().addCountriesItem("INO"))));
-            CreateDocumentPageResponse createDocumentResponseFront = customerOnboardingApi.createDocumentPage(customerId, new CreateDocumentPageRequest().image(new Image().data(getDocumentImage("document-front"))));
+            CreateDocumentPageResponse createDocumentResponseFront = customerOnboardingApi.createDocumentPage1(customerId, new CreateDocumentPageRequest().image(new Image().data(getDocumentImage("document-front"))));
             CreateDocumentPageResponse.ErrorCodeEnum documentFrontError = createDocumentResponseFront.getErrorCode();
             if (documentFrontError != null) {
                 LOG.error(documentFrontError.getValue());
                 return;
             }
             LOG.info("Document classified: " + createDocumentResponseFront.getDocumentType().getType() + " page type: " + createDocumentResponseFront.getPageType());
-            CreateDocumentPageResponse createDocumentResponseBack = customerOnboardingApi.createDocumentPage(customerId, new CreateDocumentPageRequest().image(new Image().data(getDocumentImage("document-back"))));
+            CreateDocumentPageResponse createDocumentResponseBack = customerOnboardingApi.createDocumentPage1(customerId, new CreateDocumentPageRequest().image(new Image().data(getDocumentImage("document-back"))));
             CreateDocumentPageResponse.ErrorCodeEnum documentBackError = createDocumentResponseBack.getErrorCode();
             if (documentBackError != null) {
                 LOG.error(documentBackError.getValue());

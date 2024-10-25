@@ -2,7 +2,13 @@ package com.innovatrics.integrationsamples.onboarding.liveness;
 
 import com.innovatrics.dot.integrationsamples.disapi.ApiClient;
 import com.innovatrics.dot.integrationsamples.disapi.ApiException;
-import com.innovatrics.dot.integrationsamples.disapi.model.*;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateCustomerLivenessSelfieRequest;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateCustomerLivenessSelfieResponse;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateCustomerResponse;
+import com.innovatrics.dot.integrationsamples.disapi.model.CustomerOnboardingApi;
+import com.innovatrics.dot.integrationsamples.disapi.model.EvaluateCustomerLivenessRequest;
+import com.innovatrics.dot.integrationsamples.disapi.model.EvaluateCustomerLivenessResponse;
+import com.innovatrics.dot.integrationsamples.disapi.model.Image;
 import com.innovatrics.integrationsamples.Configuration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

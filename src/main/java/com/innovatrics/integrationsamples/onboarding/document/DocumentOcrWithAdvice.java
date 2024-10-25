@@ -2,7 +2,15 @@ package com.innovatrics.integrationsamples.onboarding.document;
 
 import com.innovatrics.dot.integrationsamples.disapi.ApiClient;
 import com.innovatrics.dot.integrationsamples.disapi.ApiException;
-import com.innovatrics.dot.integrationsamples.disapi.model.*;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateCustomerResponse;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateDocumentPageRequest;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateDocumentPageResponse;
+import com.innovatrics.dot.integrationsamples.disapi.model.CreateDocumentRequest;
+import com.innovatrics.dot.integrationsamples.disapi.model.Customer;
+import com.innovatrics.dot.integrationsamples.disapi.model.CustomerOnboardingApi;
+import com.innovatrics.dot.integrationsamples.disapi.model.DocumentAdvice;
+import com.innovatrics.dot.integrationsamples.disapi.model.DocumentClassificationAdvice;
+import com.innovatrics.dot.integrationsamples.disapi.model.Image;
 import com.innovatrics.integrationsamples.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +39,7 @@ public class DocumentOcrWithAdvice {
             LOG.info("Customer created with id: " + customerId);
 
             customerOnboardingApi.createDocument(customerId, new CreateDocumentRequest().advice(new DocumentAdvice().classification(new DocumentClassificationAdvice().addCountriesItem(COUNTRY).addTypesItem(ID_TYPE))));
-            CreateDocumentPageResponse createDocumentResponse = customerOnboardingApi.createDocumentPage(customerId, new CreateDocumentPageRequest().image(new Image().data(getDocumentImage("document-front"))));
+            CreateDocumentPageResponse createDocumentResponse = customerOnboardingApi.createDocumentPage1(customerId, new CreateDocumentPageRequest().image(new Image().data(getDocumentImage("document-front"))));
             CreateDocumentPageResponse.ErrorCodeEnum documentError = createDocumentResponse.getErrorCode();
             if (documentError != null) {
                 LOG.error(documentError.getValue());
