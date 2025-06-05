@@ -1,15 +1,14 @@
 package com.innovatrics.integrationsamples.onboarding.document;
 
-import com.innovatrics.dot.integrationsamples.disapi.ApiClient;
 import com.innovatrics.dot.integrationsamples.disapi.ApiException;
 import com.innovatrics.dot.integrationsamples.disapi.model.*;
 import com.innovatrics.integrationsamples.Configuration;
+import com.innovatrics.integrationsamples.testhelper.BaseApiTest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,49 +17,52 @@ import java.util.List;
  * filtering only Czech Documents.
  * From metadata of these documents sample information is printed into log.
  */
-public class DocumentsMetadata {
-    private static final Logger LOG = LogManager.getLogger(DocumentsMetadata.class);
+public class DocumentsMetadata extends BaseApiTest<MetadataApi> {
+    private static final Logger log = LogManager.getLogger(DocumentsMetadata.class);
     private static final String MRZ = "machineReadableZone";
     private static final String COUNTRY = "CZE";
 
-    public static void main(String[] args) throws IOException, URISyntaxException {
-        final Configuration configuration = new Configuration();
-        final ApiClient client = new ApiClient().setBasePath(configuration.DOT_IDENTITY_SERVICE_URL);
-        client.setBearerToken(configuration.DOT_AUTHENTICATION_TOKEN);
-        final MetadataApi metadataApi = new MetadataApi(client);
+    public DocumentsMetadata(Configuration configuration) throws ReflectiveOperationException {
+        super(configuration);
+    }
 
-        try {
-            final DocumentMetadataResponse documentMetadataResponse = metadataApi.metadata();
+    /**
+     * This method retrieves the metadata of all documents supported by the Digital Identity Service.
+     * It then filters this list to include only documents from the country defined by the `COUNTRY` constant.
+     * For each of these filtered documents, it checks if any of the document's pages contains an MRZ (Machine Readable Zone).
+     * The details of each filtered document, including whether it contains an MRZ, the type, and edition, are logged.
+     *
+     * @throws ApiException if there is an error during the API call
+     * @throws URISyntaxException if there is an error in URI syntax
+     * @throws IOException if there is an I/O error
+     */
+    @Override
+    protected void doTest() throws ApiException, URISyntaxException, IOException {
+        final DocumentMetadataResponse documentMetadataResponse = getApi().metadata();
 
-            final List<Document> documentsMetadata = Collections.unmodifiableList(documentMetadataResponse.getDocuments());
+        final List<Document> documentsMetadata = Collections.unmodifiableList(documentMetadataResponse.getDocuments());
 
-            final List<Document> filteredDocumentsMetadata = new ArrayList<>();
-            documentsMetadata.forEach(documentMetadata -> {
-                String country = documentMetadata.getDocumentType().getCountry();
-                if (COUNTRY.equals(country)) {
-                    filteredDocumentsMetadata.add(documentMetadata);
-                }
-            });
+        final List<Document> filteredDocumentsMetadata = documentsMetadata.stream()
+                .filter(documentMetadata -> COUNTRY.equals(documentMetadata.getDocumentType().getCountry()))
+                .toList();
 
-            int documentNumber = 0;
-            LOG.info("Digital Identity Service support these " + COUNTRY + " documents:");
-            for (Document documentMetadata : filteredDocumentsMetadata) {
-                boolean hasMRZZone = false;
-                for (PageMetadata pageMetadata : documentMetadata.getPages().values()) {
-                    if (pageMetadata.getVisualZone().containsKey(MRZ)) {
-                        hasMRZZone = true;
-                        break;
-                    }
-                }
+        int documentNumber = 0;
+        log.info("Digital Identity Service support these {} {}", COUNTRY, " documents:");
 
-                LOG.info(++documentNumber + "/ Document Type: " + documentMetadata.getDocumentType().getType() +
-                        "; Document Edition: " + documentMetadata.getDocumentType().getEdition() +
-                        "; This document has " + documentMetadata.getPages().size() + " pages and " +
-                        (hasMRZZone ? "contains" : "do not contains") + " MRZ Zone");
-            }
+        for (Document documentMetadata : filteredDocumentsMetadata) {
+            boolean hasMRZZone = documentMetadata.getPages().values().stream()
+                    .anyMatch(pageMetadata -> pageMetadata.getVisualZone().containsKey(MRZ));
 
-        } catch (ApiException exception) {
-            LOG.error("Request to server failed with code: " + exception.getCode() + " and response: " + exception.getResponseBody());
+            log.info("{}/ Document Type: {}; Document Edition: {}; This document has {} pages and {} MRZ Zone",
+                    ++documentNumber,
+                    documentMetadata.getDocumentType().getType(),
+                    documentMetadata.getDocumentType().getEdition(),
+                    documentMetadata.getPages().size(),
+                    hasMRZZone ? "contains" : "do not contains");
         }
+    }
+
+    public static void main(String[] args) throws IOException, ReflectiveOperationException {
+        new DocumentsMetadata(new Configuration()).test();
     }
 }

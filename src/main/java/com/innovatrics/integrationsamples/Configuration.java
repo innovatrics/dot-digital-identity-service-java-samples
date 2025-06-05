@@ -2,9 +2,12 @@ package com.innovatrics.integrationsamples;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Properties;
 
 public class Configuration {
+    public static final String APPLICATION_PROPERTIES = "application.properties";
+    
     public final String DOT_IDENTITY_SERVICE_URL;
     public final String DOT_AUTHENTICATION_TOKEN;
     public final String DOT_AUTH0_CLIENT_ID;
@@ -28,8 +31,15 @@ public class Configuration {
     public final Double QUALITY_GLASS_CONDITIONS_PITCH_ANGLE_HIGH;
 
     public Configuration() throws IOException {
+        this(APPLICATION_PROPERTIES);
+    }
+    
+    public Configuration(final String propertyFileName) throws IOException {
         Properties appProps = new Properties();
-        appProps.load(new FileInputStream(Configuration.class.getClassLoader().getResource("application.properties").getPath()));
+
+        String propertyFile = propertyFileName != null ? propertyFileName : APPLICATION_PROPERTIES;
+        loadProperties(appProps, propertyFile);
+
         DOT_IDENTITY_SERVICE_URL = appProps.getProperty("dot-identity-service-url");
         DOT_AUTHENTICATION_TOKEN = appProps.getProperty("dot-authentication-token");
         DOT_AUTH0_CLIENT_ID = appProps.getProperty("dot-auth0-client-id");
@@ -51,5 +61,13 @@ public class Configuration {
         QUALITY_GLASS_CONDITIONS_PITCH_ANGLE_LOW = Double.parseDouble(appProps.getProperty("quality.glass-conditions.pitch-angle.low"));
         QUALITY_GLASS_CONDITIONS_YAW_ANGLE_HIGH = Double.parseDouble(appProps.getProperty("quality.glass-conditions.yaw-angle.high"));
         QUALITY_GLASS_CONDITIONS_PITCH_ANGLE_HIGH = Double.parseDouble(appProps.getProperty("quality.glass-conditions.pitch-angle.high"));
+    }
+
+    private void loadProperties(Properties appProps, String propertyFile) throws IOException {
+        try (FileInputStream fis = new FileInputStream(Objects.requireNonNull(Configuration.class.getClassLoader().getResource(propertyFile)).getPath())) {
+            appProps.load(fis);
+        } catch (Exception e) {
+            throw new IOException("Property file not found or incorrect: " + propertyFile, e);
+        }
     }
 }

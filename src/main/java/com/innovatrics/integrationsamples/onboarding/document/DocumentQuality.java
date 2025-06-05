@@ -1,73 +1,86 @@
 package com.innovatrics.integrationsamples.onboarding.document;
 
-import com.innovatrics.dot.integrationsamples.disapi.ApiClient;
 import com.innovatrics.dot.integrationsamples.disapi.ApiException;
 import com.innovatrics.dot.integrationsamples.disapi.model.CreateCustomerResponse;
-import com.innovatrics.dot.integrationsamples.disapi.model.CreateDocumentPageRequest;
 import com.innovatrics.dot.integrationsamples.disapi.model.CreateDocumentPageResponse;
 import com.innovatrics.dot.integrationsamples.disapi.model.CreateDocumentRequest;
-import com.innovatrics.dot.integrationsamples.disapi.model.CustomerOnboardingApi;
 import com.innovatrics.dot.integrationsamples.disapi.model.DocumentPageQuality;
-import com.innovatrics.dot.integrationsamples.disapi.model.Image;
 import com.innovatrics.integrationsamples.Configuration;
+import com.innovatrics.integrationsamples.testhelper.CustomerOnboardingApiTest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Path;
 
+/**
+ * L2DocumentQuality is a test class to perform tests
+ * related to the document quality verification process during customer onboarding.
+ * Level_2 documents are trained documents. Metadata and models are available
+ */
+public class DocumentQuality extends CustomerOnboardingApiTest {
+    private static final Logger log = LoggerFactory.getLogger(DocumentQuality.class);
 
-public class DocumentQuality {
-    private static final Logger LOG = LoggerFactory.getLogger(DocumentQuality.class);
+    public DocumentQuality(Configuration configuration) throws ReflectiveOperationException {
+        super(configuration);
+    }
 
-    public static void main(String[] args) throws IOException, URISyntaxException {
-        final Configuration configuration = new Configuration();
-        final ApiClient client = new ApiClient().setBasePath(configuration.DOT_IDENTITY_SERVICE_URL);
-        client.setBearerToken(configuration.DOT_AUTHENTICATION_TOKEN);
-        final CustomerOnboardingApi customerOnboardingApi = new CustomerOnboardingApi(client);
+    /**
+     * Executes the test that involves creating a customer, verifying the quality of a document, and then deleting the customer.
+     *
+     * @throws ApiException if an API-related error occurs during the test
+     * @throws URISyntaxException if the URI for the API request is malformed
+     * @throws IOException if an input or output exception occurs
+     */
+    @Override
+    protected void doTest() throws ApiException, URISyntaxException, IOException {
+        final CreateCustomerResponse customerResponse = getApi().createCustomer();
+        String customerId = customerResponse.getId();
+        log.info("Customer created with id: {}", customerId);
 
         try {
-            final CreateCustomerResponse customerResponse = customerOnboardingApi.createCustomer();
-            String customerId = customerResponse.getId();
-            LOG.info("Customer created with id: " + customerId);
-
-            customerOnboardingApi.createDocument(customerId, new CreateDocumentRequest());
-            CreateDocumentPageResponse createDocumentResponse = customerOnboardingApi.createDocumentPage1(customerId, new CreateDocumentPageRequest().image(new Image().data(getDocumentImage("document-front"))));
-            CreateDocumentPageResponse.ErrorCodeEnum documentError = createDocumentResponse.getErrorCode();
-            if (documentError != null) {
-                LOG.error(documentError.getValue());
-                return;
-            }
-            DocumentPageQuality pageQuality = customerOnboardingApi.documentPageQuality(customerId, "front");
-            if (pageQuality.getFine()) {
-                LOG.info("Document processed successfully.");
-                if (pageQuality.getWarnings() != null) {
-                    for (DocumentPageQuality.WarningsEnum warning : pageQuality.getWarnings()) {
-                        LOG.warn("Document quality warning: " + warning.getValue());
-                    }
-                }
-            } else {
-                LOG.error("Document processing failed with errors.");
-                if (pageQuality.getIssues() != null) {
-                    for (DocumentPageQuality.IssuesEnum issue : pageQuality.getIssues()) {
-                        LOG.error("Document quality issue: " + issue.getValue());
-                    }
-                }
-                return;
-            }
-
-            LOG.info("Deleting customer with id: " + customerId);
-            customerOnboardingApi.deleteCustomer(customerId);
-        } catch (ApiException exception) {
-            LOG.error("Request to server failed with code: " + exception.getCode() + " and response: " + exception.getResponseBody());
+            verifyDocumentQuality(customerId);
+        } finally {
+            deleteCustomerWithId(customerId);
         }
     }
 
-    private static byte[] getDocumentImage(String imageId) throws URISyntaxException, IOException {
-        final URL resource = DocumentQuality.class.getClassLoader().getResource("images/documents/" + imageId + ".jpeg");
-        return new FileInputStream(Path.of(resource.toURI()).toFile()).readAllBytes();
+    /**
+     * Verifies the quality of a document for a given customer. The method attempts to create a document,
+     * create a document page, and then evaluate if the document page is of acceptable quality.
+     *
+     * @param customerId the unique identifier of the customer whose document quality is to be verified
+     * @throws ApiException if there's an error related to API operations
+     * @throws URISyntaxException if there's an error with the URI syntax
+     * @throws IOException if an IO error occurs during the operation
+     */
+    private void verifyDocumentQuality(String customerId) throws ApiException, URISyntaxException, IOException {
+        getApi().createDocument(customerId, new CreateDocumentRequest());
+        CreateDocumentPageResponse createDocumentResponse =
+                getApi().createDocumentPage1(customerId, createDocumentPageRequest(getL2DocumentImage("document-front")));
+
+        checkDocumentResponseThrowsWhenError(createDocumentResponse);
+
+        DocumentPageQuality pageQuality = getApi().documentPageQuality(customerId, "front");
+        if (pageQuality.getFine()) {
+            log.info("Document processed successfully.");
+            if (pageQuality.getWarnings() != null) {
+                for (DocumentPageQuality.WarningsEnum warning : pageQuality.getWarnings()) {
+                    log.warn("Document quality warning: {}", warning.getValue());
+                }
+            }
+        } else {
+            log.error("Document processing failed with errors.");
+            if (pageQuality.getIssues() != null) {
+                for (DocumentPageQuality.IssuesEnum issue : pageQuality.getIssues()) {
+                    log.error("Document quality issue: {}", issue.getValue());
+                }
+            }
+            throw new ApiException("Document quality issue.");
+        }
+    }
+
+    public static void main(String[] args) throws IOException, ReflectiveOperationException {
+        new DocumentQuality(new Configuration()).test();
     }
 }

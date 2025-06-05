@@ -1,6 +1,5 @@
 package com.innovatrics.integrationsamples.faceoperations;
 
-import com.innovatrics.dot.integrationsamples.disapi.ApiClient;
 import com.innovatrics.dot.integrationsamples.disapi.ApiException;
 import com.innovatrics.dot.integrationsamples.disapi.model.CreateFaceRequest;
 import com.innovatrics.dot.integrationsamples.disapi.model.CropCoordinatesResponse;
@@ -8,6 +7,7 @@ import com.innovatrics.dot.integrationsamples.disapi.model.FaceOperationsApi;
 import com.innovatrics.dot.integrationsamples.disapi.model.Image;
 import com.innovatrics.dot.integrationsamples.disapi.model.ImageCrop;
 import com.innovatrics.integrationsamples.Configuration;
+import com.innovatrics.integrationsamples.testhelper.BaseApiTest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,78 +22,106 @@ import java.io.IOException;
  * various configuration options. Crops should be only used for UI purposes and should not be reused as reference
  * images for re-detection.
  */
-public class FaceImageCrops {
-    private static final Logger LOG = LogManager.getLogger(FaceImageCrops.class);
+public class FaceImageCrops extends BaseApiTest<FaceOperationsApi> {
+    private static final Logger log = LogManager.getLogger(FaceImageCrops.class);
 
-    public static void main(String[] args) throws IOException {
-        final Configuration configuration = new Configuration();
-        final ApiClient client = new ApiClient().setBasePath(configuration.DOT_IDENTITY_SERVICE_URL);
-        client.setBearerToken(configuration.DOT_AUTHENTICATION_TOKEN);
-        final FaceOperationsApi faceApi = new FaceOperationsApi(client);
+    private static final int FORCED_WIDTH = 800;
+    private static final int FORCED_HEIGHT = 800;
 
-        try {
-            String faceId = faceApi.detect1(new CreateFaceRequest().image(new Image().url(configuration.EXAMPLE_IMAGE_URL))).getId();
-            LOG.info("Face detected with id: " + faceId);
-
-            CropCoordinatesResponse cropCoordinatesResponse = faceApi.doCropCoordinates(faceId);
-            LOG.info("Face crop found with face Fully Present: " + cropCoordinatesResponse.getFullyCaptured() + " on coordinates: \n" + cropCoordinatesResponse.getCoordinates());
-
-            String fileName = "croppedFaceImage.png";
-            ImageCrop crop = faceApi.doCrop(faceId, null, null);
-            saveImage(crop.getData(), fileName);
-            LOG.info("Face image crop obtained and stored in faceImageCropsOutput/" + fileName);
-
-            int forcedWidth = 800;
-            int forcedHeight = 800;
-
-            String fileNameForWidth = "croppedFaceImage_width_" + forcedWidth + ".png";
-            LOG.info("Calling crop for face with id: " + faceId + ", resulting width: " + forcedWidth);
-            ImageCrop cropForcedWidth = faceApi.doCrop(faceId, null, forcedWidth);
-            saveImage(cropForcedWidth.getData(), fileNameForWidth);
-            LOG.info("Face image crop obtained and stored in faceImageCropsOutput/" + fileNameForWidth);
-
-            String fileNameForHeight = "croppedFaceImage_height_" + forcedHeight + ".png";
-            LOG.info("Calling crop for face with id: " + faceId + ", resulting heigth: " + forcedHeight);
-            ImageCrop cropForcedHeight = faceApi.doCrop(faceId, forcedHeight, null);
-            saveImage(cropForcedHeight.getData(), fileNameForHeight);
-            LOG.info("Face image crop obtained and stored in faceImageCropsOutput/" + fileNameForHeight);
-
-            // removed background
-
-            String fileNameForBackground = "removedBackgroundFaceImage.png";
-            LOG.info("Calling crop with removed background for face with id: " + faceId);
-            ImageCrop removeBackgroundResponse = faceApi.doCropRemoveBackground(faceId, null, null);
-            saveImage(removeBackgroundResponse.getData(), fileNameForBackground);
-            LOG.info("Face image removed background crop obtained and stored in faceImageCropsOutput/" + fileNameForBackground);
-
-            String fileNameForBackgroundWidth = "removedBackgroundFaceImage_width_" + forcedWidth + ".png";
-            LOG.info("Calling crop with removed background for face with id: " + faceId + ", resulting width: " + forcedWidth);
-            ImageCrop removeBackgroundResponseWidth = faceApi.doCropRemoveBackground(faceId, null, forcedWidth);
-            saveImage(removeBackgroundResponseWidth.getData(), fileNameForBackgroundWidth);
-            LOG.info("Face image removed background crop obtained and stored in faceImageCropsOutput/" + fileNameForBackgroundWidth);
-
-            String fileNameForBackgroundHeight = "removedBackgroundFaceImage_heigth_" + forcedHeight + ".png";
-            LOG.info("Calling crop with removed background for face with id: " + faceId + ", resulting heigth: " + forcedHeight);
-            ImageCrop removeBackgroundResponseHeigth = faceApi.doCropRemoveBackground(faceId, forcedHeight, null);
-            saveImage(removeBackgroundResponseHeigth.getData(), fileNameForBackgroundHeight);
-            LOG.info("Face image removed background crop obtained and stored in faceImageCropsOutput/" + fileNameForBackgroundHeight);
-        } catch (ApiException exception) {
-            LOG.error("Request to server failed with code: " + exception.getCode() + " and response: " + exception.getResponseBody());
-        }
+    public FaceImageCrops(Configuration configuration) throws ReflectiveOperationException {
+        super(configuration);
     }
 
-    private static void saveImage(byte[] image, String fileName) throws IOException {
-        prepareOutputDirectory();
+    /**
+     * Detects the face in the image and logs the coordinates of the cropped image.
+     * If an attempt is made to crop with incorrect dimensions, the cropping
+     * should still be performed correctly. The image size will be aligned, and the image will be resized.
+     *
+     * @throws ApiException if an error occurs during any API call
+     * @throws IOException if an I/O error occurs during file operations
+     */
+    @Override
+    protected void doTest() throws ApiException, IOException {
+        String faceId = getApi().detect1(new CreateFaceRequest().image(new Image().url(configuration.EXAMPLE_IMAGE_URL))).getId();
+        log.info("Face detected with id: {}", faceId);
+
+        CropCoordinatesResponse cropCoordinatesResponse = getApi().doCropCoordinates(faceId);
+        log.info("Face crop found with face Fully Present: {} on coordinates: \n{}", cropCoordinatesResponse.getFullyCaptured(), cropCoordinatesResponse.getCoordinates());
+
+        String initialFileName = "croppedFaceImage.png";
+        performCrop(faceId, null, null, initialFileName);
+
+        String fileNameForWidth = "croppedFaceImage_width_" + FORCED_WIDTH + ".png";
+        performCrop(faceId, null, FORCED_WIDTH, fileNameForWidth);
+
+        String fileNameForHeight = "croppedFaceImage_height_" + FORCED_HEIGHT + ".png";
+        performCrop(faceId, FORCED_HEIGHT, null, fileNameForHeight);
+
+        // removed background
+
+        String fileNameForBackground = "removedBackgroundFaceImage.png";
+        performCropWithBackgroundRemoval(faceId, null, null, fileNameForBackground);
+
+        String fileNameForBackgroundWidth = "removedBackgroundFaceImage_width_" + FORCED_WIDTH + ".png";
+        performCropWithBackgroundRemoval(faceId, null, FORCED_WIDTH, fileNameForBackgroundWidth);
+
+        String fileNameForBackgroundHeight = "removedBackgroundFaceImage_height_" + FORCED_HEIGHT + ".png";
+        performCropWithBackgroundRemoval(faceId, FORCED_HEIGHT, null, fileNameForBackgroundHeight);
+    }
+
+    /**
+     * Performs a cropping operation on a face image identified by the given face ID and saves the cropped image to a file.
+     *
+     * @param faceId the identifier of the face image to be cropped
+     * @param horizontalLength the width of the resulting cropped image
+     * @param verticalLength the height of the resulting cropped image
+     * @param fileName the name of the file where the cropped image will be saved
+     * @throws ApiException if an error occurs while attempting to crop the image using the API
+     * @throws IOException if an error occurs during the saving of the image
+     */
+    private void performCrop(String faceId, Integer horizontalLength, Integer verticalLength, String fileName) throws ApiException, IOException {
+        log.info("Calling crop for face with id: {}, resulting height: {}, width: {}", faceId, horizontalLength, verticalLength);
+        ImageCrop crop = getApi().doCrop(faceId, horizontalLength, verticalLength);
+        saveImage(crop.getData(), fileName);
+        log.info("Face image crop obtained and stored in faceImageCropsOutput/{}", fileName);
+    }
+
+    /**
+     * Performs a crop operation on a face image while removing the background.
+     *
+     * @param faceId the identifier of the face image to be processed
+     * @param horizontalLength the desired width of the resulting cropped image
+     * @param verticalLength the desired height of the resulting cropped image
+     * @param fileName the name of the file where the resulting image will be saved
+     * @throws ApiException if an error occurs while attempting to crop the image via the API
+     * @throws IOException if an I/O error occurs during the saving of the image
+     */
+    private void performCropWithBackgroundRemoval(String faceId, Integer horizontalLength, Integer verticalLength, String fileName) throws ApiException, IOException {
+        log.info("Calling crop with removed background for face with id: {}, resulting height: {}, width: {}", faceId, horizontalLength, verticalLength);
+        ImageCrop crop = getApi().doCropRemoveBackground(faceId, horizontalLength, verticalLength);
+        saveImage(crop.getData(), fileName);
+        log.info("Face image removed background crop obtained and stored in faceImageCropsOutput/{}", fileName);
+    }
+
+    /**
+     * Saves the given image data to a specified file.
+     * This method first prepares the output directory where the image will be saved.
+     * It then reads the image data from a byte array and writes it to a file
+     * in the "faceImageCropsOutput" directory with the given file name.
+     *
+     * @param image the byte array representing the image data to be saved
+     * @param fileName the name of the file to which the image data is to be saved
+     * @throws IOException if an I/O error occurs during the saving of the image
+     */
+    private void saveImage(byte[] image, String fileName) throws IOException {
+        prepareOutputDirectory("faceImageCropsOutput");
 
         ByteArrayInputStream bis = new ByteArrayInputStream(image);
         BufferedImage bImage2 = ImageIO.read(bis);
         ImageIO.write(bImage2, "png", new File("faceImageCropsOutput/" + fileName));
     }
 
-    private static void prepareOutputDirectory() {
-        File resultDirectory = new File("faceImageCropsOutput");
-        if (!(resultDirectory.exists() && resultDirectory.isDirectory())) {
-            resultDirectory.mkdir();
-        }
+    public static void main(String[] args) throws IOException, ReflectiveOperationException {
+        new FaceImageCrops(new Configuration()).test();
     }
 }

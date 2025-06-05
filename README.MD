@@ -22,6 +22,7 @@ All samples can run independently. Project is implemented using Java/Gradle buil
 17. [Create Face Image Crops](#create-face-image-crops)
 18. [Evaluate Face Image Quality](#evaluate-face-image-quality)
 19. [Check of Face Wearables (face mask, glasses, etc.)](#check-of-face-wearables-face-mask-glasses-etc)
+20. [Parallel GET Requests](#example-of-parallel-get-requests)
 
 ## Build and Run
 You can use attached Gradle wrapper for build and run of samples.
@@ -539,3 +540,37 @@ sequenceDiagram
     DIS-->>-Client: Face glasses score
     Client->>Client: Check wearables
 ```
+
+### Parallel Get Requests to DIS
+
+DIS (Document Inspection Service) supports parallel GET requests, enabling concurrent data retrieval
+operations. This feature is particularly useful in accelerating workflows where multiple inspections or data fetches
+need to be performed simultaneously.
+
+#### Example of Parallel GET Requests
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant DIS
+    
+    Client->>+DIS: Create customer
+    DIS-->>-Client: Customer ID
+    Client->>DIS: Create customer's document
+    Client->>+DIS: Create (Upload) document page
+    DIS-->>-Client: Document page metadata and detection
+    
+    par Parallel Requests
+        Client->>+DIS: Get customer
+        DIS-->>-Client: Customer data including data from document
+        
+        Client->>+DIS: Get customer inspect
+        DIS-->>-Client: Customer inspect evaluation
+    
+        Client->>+DIS: Get document inspect
+        DIS-->>-Client: Document inspect evaluation
+    end
+```
+
+In the example above, the client sends three GET requests to the DIS service in parallel to obtain customer document data, customer inspect
+evaluation and document inspect evaluation. The responses are received independently.

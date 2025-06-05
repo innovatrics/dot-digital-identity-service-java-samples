@@ -1,8 +1,8 @@
 ### Customer Onboarding
-Customer onboarding serves for creating a digital identity of an individual called a customer. 
-Onboarding aggregates all the data supplied by the client like selfies or document images 
-which can be later used for inspecting the customer. This data is processed, the face is detected on the selfie, 
-the document is classified, normalized and OCR is performed. Data is structured for straightforward inspection of the customer. 
+Customer onboarding serves for creating a digital identity of an individual called a customer.
+Onboarding aggregates all the data supplied by the client like selfies or document images
+which can be later used for inspecting the customer. This data is processed, the face is detected on the selfie,
+the document is classified, normalized and OCR is performed. Data is structured for straightforward inspection of the customer.
 Onboarding flow is customizable and only portion of the data can be supplied meeting the integrator's needs.
 
 Following operations can be performed on the customer's data
@@ -97,7 +97,7 @@ sequenceDiagram
 This sample demonstrates Customer Onboarding workflow using request sessions, which ensure the provided data were created at the time of the onboarding.
 
 Before the customer is created, session must be initialized, returning unique session token in the response. To create a customer linked to the session, the session token must be provided in the header.
-Every subsequent request accessing this customer must have the same session token present in the header. 
+Every subsequent request accessing this customer must have the same session token present in the header.
 
 While the onboarding flow is fully customizable, it is recommended that the submission of selfie, document pages and liveness data be in the form of binary files produced by DOT components to ensure the highest level of protection.
 At the end of the onboarding process, the session is deleted, consequently deleting the linked customer as well.
