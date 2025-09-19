@@ -31,7 +31,7 @@ public class FaceImageQualityCheck extends BaseApiTest<FaceOperationsApi> {
      */
     @Override
     protected void doTest() throws ApiException {
-        final CreateFaceResponse faceResponse = getApi().detect1(new CreateFaceRequest().image(new Image().url(configuration.EXAMPLE_IMAGE_URL)));
+        final CreateFaceResponse faceResponse = getApi().detectFace(new CreateFaceRequest().image(new Image().url(configuration.EXAMPLE_IMAGE_URL)));
         final String faceId = faceResponse.getId();
         log.info("Face detected with id: {}", faceId);
 

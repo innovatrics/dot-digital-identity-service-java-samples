@@ -42,7 +42,7 @@ public class FaceImageCrops extends BaseApiTest<FaceOperationsApi> {
      */
     @Override
     protected void doTest() throws ApiException, IOException {
-        String faceId = getApi().detect1(new CreateFaceRequest().image(new Image().url(configuration.EXAMPLE_IMAGE_URL))).getId();
+        String faceId = getApi().detectFace(new CreateFaceRequest().image(new Image().url(configuration.EXAMPLE_IMAGE_URL))).getId();
         log.info("Face detected with id: {}", faceId);
 
         CropCoordinatesResponse cropCoordinatesResponse = getApi().doCropCoordinates(faceId);

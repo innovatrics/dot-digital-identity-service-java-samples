@@ -135,7 +135,7 @@ public class CustomerInspectAndDocumentInspectCheck extends CustomerOnboardingAp
 
     private void prepareAllDataForInspect(String customerId) throws ApiException, URISyntaxException, IOException {
         log.info("Data preparation started.");
-        CreateSelfieResponse selfieResponse = getApi().createSelfie1(customerId, new CreateSelfieRequest().image(new Image().data(getFacesImage("face"))));
+        CreateSelfieResponse selfieResponse = getApi().createSelfie(customerId, new CreateSelfieRequest().image(new Image().data(getFacesImage("face"))));
         CreateSelfieResponse.ErrorCodeEnum selfieError = selfieResponse.getErrorCode();
         if (selfieError != null) {
             log.error(selfieError.getValue());
@@ -160,14 +160,14 @@ public class CustomerInspectAndDocumentInspectCheck extends CustomerOnboardingAp
 
         getApi().createDocument(customerId, new CreateDocumentRequest().advice(new DocumentAdvice().classification(new DocumentClassificationAdvice().addCountriesItem("INO"))));
         CreateDocumentPageResponse createDocumentResponseFront =
-                getApi().createDocumentPage1(customerId, new CreateDocumentPageRequest().image(new Image().data(getL2DocumentImage("document-front"))));
+                getApi().createDocumentPage(customerId, new CreateDocumentPageRequest().image(new Image().data(getL2DocumentImage("document-front"))));
         CreateDocumentPageResponse.ErrorCodeEnum documentFrontError = createDocumentResponseFront.getErrorCode();
         if (documentFrontError != null) {
             log.error(documentFrontError.getValue());
         }
 
         CreateDocumentPageResponse createDocumentResponseBack =
-                getApi().createDocumentPage1(customerId, new CreateDocumentPageRequest().image(new Image().data(getL2DocumentImage("document-back"))));
+                getApi().createDocumentPage(customerId, new CreateDocumentPageRequest().image(new Image().data(getL2DocumentImage("document-back"))));
         CreateDocumentPageResponse.ErrorCodeEnum documentBackError = createDocumentResponseBack.getErrorCode();
         if (documentBackError != null) {
             log.error(documentBackError.getValue());

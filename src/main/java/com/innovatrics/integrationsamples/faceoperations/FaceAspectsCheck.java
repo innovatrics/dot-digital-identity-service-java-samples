@@ -64,7 +64,7 @@ public class FaceAspectsCheck extends BaseApiTest<FaceOperationsApi> {
      * @throws ApiException If there is an error while communicating with the Face Operations API.
      */
     private String detectFace(FaceOperationsApi faceApi, String imageUrl) throws ApiException {
-        return faceApi.detect1(new CreateFaceRequest().image(new Image().url(imageUrl))).getId();
+        return faceApi.detectFace(new CreateFaceRequest().image(new Image().url(imageUrl))).getId();
     }
 
     /**

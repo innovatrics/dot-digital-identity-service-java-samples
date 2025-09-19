@@ -42,10 +42,10 @@ public class L0DocumentValidation extends CustomerOnboardingApiTest {
 
         getApi().createDocument(customerId, new CreateDocumentRequest());
         CreateDocumentPageResponse createDocumentFrontPageResponse =
-                getApi().createDocumentPage1(customerId, createDocumentPageRequest(getL0DocumentImage("document-front")));
+                getApi().createDocumentPage(customerId, createDocumentPageRequest(getL0DocumentImage("document-front")));
 
         // add also back side to read MRZ data
-        CreateDocumentPageResponse createDocumentBackPageResponse = getApi().createDocumentPage1(customerId, createDocumentPageRequest(getL0DocumentImage("document-back")));
+        CreateDocumentPageResponse createDocumentBackPageResponse = getApi().createDocumentPage(customerId, createDocumentPageRequest(getL0DocumentImage("document-back")));
 
         GetCustomerResponse customer = getApi().getCustomer(customerId);
         validateDocument(createDocumentFrontPageResponse, createDocumentBackPageResponse, customer.getCustomer());
@@ -64,12 +64,25 @@ public class L0DocumentValidation extends CustomerOnboardingApiTest {
         if (pageHasNotRecognizedWarning(createDocumentFrontPageResponse)
                 && pageHasNotRecognizedWarning(createDocumentBackPageResponse)
                 && customer.getDocument() != null
-                && (customer.getDocument().getType() == null || documentTypeIsNotRecognized(customer.getDocument().getType()))
+                && (customer.getDocument().getType() == null
+                || documentTypeIsNotRecognized(customer.getDocument().getType())
+                || documentTypeIsNotSupported(customer.getDocument().getType()))
         ) {
             log.info("The uploaded document Level is 0.");
         } else {
-            log.info("The uploaded document other than Level 0.");
+            log.warn("The uploaded document other than Level 0.");
         }
+    }
+
+    /**
+     * Determines if the provided document type is not supported based on support level attribute.
+     *
+     * @param documentType The document type to be checked.
+     * @return true if the document type support level is equal to NOT_SUPPORTED, false otherwise.
+     */
+    private boolean documentTypeIsNotSupported(final DocumentType documentType) {
+        return documentType != null
+                && documentType.getSupportLevel() == DocumentType.SupportLevelEnum.NOT_SUPPORTED;
     }
 
     /**

@@ -42,10 +42,12 @@ public class L1DocumentValidation extends CustomerOnboardingApiTest {
         log.info("Customer created with id: {}", customerId);
 
         getApi().createDocument(customerId, new CreateDocumentRequest());
-        CreateDocumentPageResponse responseFront =
-                getApi().createDocumentPage1(customerId, createDocumentPageRequest(getL1DocumentImage("document-front")));
+
+        // add front side
+        getApi().createDocumentPage(customerId, createDocumentPageRequest(getL1DocumentImage("document-front")));
+
         // add also back side to read MRZ data
-        getApi().createDocumentPage1(customerId, createDocumentPageRequest(getL1DocumentImage("document-back")));
+        getApi().createDocumentPage(customerId, createDocumentPageRequest(getL1DocumentImage("document-back")));
 
         GetCustomerResponse customer = getApi().getCustomer(customerId);
         assert customer.getCustomer() != null;
@@ -58,10 +60,10 @@ public class L1DocumentValidation extends CustomerOnboardingApiTest {
      * @param customer the customer whose document is to be validated
      */
     private void validateDocument(Customer customer) {
-        if (documentHasMrz(customer.getDocument()) && documentTypeHasOnlyTravelType(customer.getDocument().getType())) {
+        if (documentHasMrz(customer.getDocument()) && documentSupportsOnlyMrzExtraction(customer.getDocument().getType())) {
             log.info("The uploaded document Level is 1.");
         } else {
-            log.info("The uploaded document other than Level 1.");
+            log.warn("The uploaded document other than Level 1.");
         }
     }
 
@@ -75,17 +77,9 @@ public class L1DocumentValidation extends CustomerOnboardingApiTest {
         return document != null && document.getMrz() != null;
     }
 
-    /**
-     * Checks if the given DocumentType has only the Machine Readable Travel Document (MRTD) information.
-     *
-     * @param documentType the DocumentType object to be evaluated
-     * @return true if the DocumentType contains only the MRTD; false otherwise
-     */
-    private boolean documentTypeHasOnlyTravelType(final DocumentType documentType) {
+    private boolean documentSupportsOnlyMrzExtraction(final DocumentType documentType) {
         return documentType != null
-                && documentType.getType() == null
-                && documentType.getEdition() == null
-                && documentType.getCountry() == null
+                && documentType.getSupportLevel() == DocumentType.SupportLevelEnum.MRZ_EXTRACTION_ONLY
                 && documentType.getMachineReadableTravelDocument() != null;
     }
 

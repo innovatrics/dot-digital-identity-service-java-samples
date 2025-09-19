@@ -19,6 +19,7 @@ import com.innovatrics.dot.integrationsamples.disapi.model.ImageCrop;
 import com.innovatrics.dot.integrationsamples.disapi.model.LivenessSelfieOrigin;
 import com.innovatrics.integrationsamples.Configuration;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -77,7 +78,7 @@ public class CustomerOnboardingWithMagnifeyeLiveness extends CustomerOnboardingA
         getApi().createLiveness(customerId);
 
         // create customer liveness record for Magnifeye Liveness
-        final byte[] magnifeyeBinaryData = getBinaryData(configuration.LIVENESS_RECORDS_MAGNIFEYE_LIVENESS_BINARY_FILE);
+        final File magnifeyeBinaryData = getBinaryFile(configuration.LIVENESS_RECORDS_MAGNIFEYE_LIVENESS_BINARY_FILE);
         final CreateCustomerLivenessRecordResponse livenessRecordResponse = getApi().createLivenessRecord(customerId, magnifeyeBinaryData);
         CreateCustomerLivenessRecordResponse.ErrorCodeEnum livenessRecordError = livenessRecordResponse.getErrorCode();
         if (livenessRecordError != null) {
@@ -104,7 +105,7 @@ public class CustomerOnboardingWithMagnifeyeLiveness extends CustomerOnboardingA
         final String livenessSelfieLink = livenessRecordResponse.getLinks().getSelfie();
 
         // create customer selfie using Magnifeye liveness selfie
-        final CreateSelfieResponse selfieResponse = getApi().createSelfie1(customerId, new CreateSelfieRequest().selfieOrigin(new LivenessSelfieOrigin().link(livenessSelfieLink)));
+        final CreateSelfieResponse selfieResponse = getApi().createSelfie(customerId, new CreateSelfieRequest().selfieOrigin(new LivenessSelfieOrigin().link(livenessSelfieLink)));
         CreateSelfieResponse.ErrorCodeEnum createSelfieError = selfieResponse.getErrorCode();
         if (createSelfieError != null) {
             log.error(createSelfieError.getValue());
@@ -125,7 +126,7 @@ public class CustomerOnboardingWithMagnifeyeLiveness extends CustomerOnboardingA
 
         // create document front page
         final CreateDocumentPageResponse createDocumentResponseFront =
-                getApi().createDocumentPage1(customerId, new CreateDocumentPageRequest().image(new Image().data(getL2DocumentImage("document-front"))));
+                getApi().createDocumentPage(customerId, new CreateDocumentPageRequest().image(new Image().data(getL2DocumentImage("document-front"))));
         CreateDocumentPageResponse.ErrorCodeEnum documentFrontError = createDocumentResponseFront.getErrorCode();
         if (documentFrontError != null) {
             log.error(documentFrontError.getValue());
@@ -135,7 +136,7 @@ public class CustomerOnboardingWithMagnifeyeLiveness extends CustomerOnboardingA
 
         // create document back page
         final CreateDocumentPageResponse createDocumentResponseBack =
-                getApi().createDocumentPage1(customerId, new CreateDocumentPageRequest().image(new Image().data(getL2DocumentImage("document-back"))));
+                getApi().createDocumentPage(customerId, new CreateDocumentPageRequest().image(new Image().data(getL2DocumentImage("document-back"))));
         CreateDocumentPageResponse.ErrorCodeEnum documentBackError = createDocumentResponseBack.getErrorCode();
         if (documentBackError != null) {
             log.error(documentBackError.getValue());

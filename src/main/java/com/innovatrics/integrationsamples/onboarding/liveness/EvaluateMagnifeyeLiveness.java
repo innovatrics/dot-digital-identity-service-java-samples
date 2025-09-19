@@ -9,6 +9,7 @@ import com.innovatrics.dot.integrationsamples.disapi.model.EvaluateCustomerLiven
 import com.innovatrics.dot.integrationsamples.disapi.model.EvaluateCustomerLivenessResponse;
 import com.innovatrics.integrationsamples.Configuration;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -61,7 +62,7 @@ public class EvaluateMagnifeyeLiveness extends CustomerOnboardingApiTest {
         getApi().createLiveness(customerId);
 
         // create customer liveness record for Magnifeye Liveness
-        final byte[] binaryData = getBinaryData(configuration.LIVENESS_RECORDS_MAGNIFEYE_LIVENESS_BINARY_FILE);
+        final File binaryData = getBinaryFile(configuration.LIVENESS_RECORDS_MAGNIFEYE_LIVENESS_BINARY_FILE);
         final CreateCustomerLivenessRecordResponse livenessRecordResponse = getApi().createLivenessRecord(customerId, binaryData);
 
         if (livenessRecordResponse.getErrorCode() == null) {

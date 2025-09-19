@@ -18,7 +18,8 @@ openApiGenerate {
     generateModelTests = false
     configOptions = [
             enumPropertyNaming    : 'original',
-            enumUnknownDefaultCase: 'true'
+            enumUnknownDefaultCase: 'true',
+            dateLibrary: 'java8'
     ]
 }
 

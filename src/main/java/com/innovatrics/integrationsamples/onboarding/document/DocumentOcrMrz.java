@@ -45,7 +45,7 @@ public class DocumentOcrMrz extends CustomerOnboardingApiTest {
 
         getApi().createDocument(customerId, new CreateDocumentRequest().addSourcesItem(CreateDocumentRequest.SourcesEnum.MRZ));
         CreateDocumentPageResponse createDocumentResponse =
-                getApi().createDocumentPage1(customerId, createDocumentPageRequest(getL2DocumentImage("document-back")));
+                getApi().createDocumentPage(customerId, createDocumentPageRequest(getL2DocumentImage("document-back")));
 
         checkDocumentResponseAndDeleteCustomer(createDocumentResponse, customerId);
     }

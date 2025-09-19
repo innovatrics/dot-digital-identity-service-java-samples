@@ -67,7 +67,7 @@ public class CustomerOnboarding extends CustomerOnboardingApiTest {
      * @throws ApiException if the API request fails or the response indicates an error
      */
     private void evaluateCustomerOnboarding(String customerId) throws URISyntaxException, IOException, ApiException {
-        CreateSelfieResponse selfieResponse = getApi().createSelfie1(customerId, new CreateSelfieRequest().image(new Image().data(getFacesImage("face"))));
+        CreateSelfieResponse selfieResponse = getApi().createSelfie(customerId, new CreateSelfieRequest().image(new Image().data(getFacesImage("face"))));
         CreateSelfieResponse.ErrorCodeEnum selfieError = selfieResponse.getErrorCode();
         if (selfieError != null) {
             log.error(selfieError.getValue());
@@ -99,7 +99,7 @@ public class CustomerOnboarding extends CustomerOnboardingApiTest {
 
         getApi().createDocument(customerId, new CreateDocumentRequest().advice(new DocumentAdvice().classification(new DocumentClassificationAdvice().addCountriesItem("INO"))));
         CreateDocumentPageResponse createDocumentResponseFront =
-                getApi().createDocumentPage1(customerId, new CreateDocumentPageRequest().image(new Image().data(getL2DocumentImage("document-front"))));
+                getApi().createDocumentPage(customerId, new CreateDocumentPageRequest().image(new Image().data(getL2DocumentImage("document-front"))));
         CreateDocumentPageResponse.ErrorCodeEnum documentFrontError = createDocumentResponseFront.getErrorCode();
         if (documentFrontError != null) {
             log.error(documentFrontError.getValue());
@@ -107,7 +107,7 @@ public class CustomerOnboarding extends CustomerOnboardingApiTest {
         }
         log.info("Document classified: {} page type: {}", createDocumentResponseFront.getDocumentType().getType(), createDocumentResponseFront.getPageType());
         CreateDocumentPageResponse createDocumentResponseBack =
-                getApi().createDocumentPage1(customerId, new CreateDocumentPageRequest().image(new Image().data(getL2DocumentImage("document-back"))));
+                getApi().createDocumentPage(customerId, new CreateDocumentPageRequest().image(new Image().data(getL2DocumentImage("document-back"))));
         verifyDocumentResponseBack(customerId, createDocumentResponseBack);
     }
 

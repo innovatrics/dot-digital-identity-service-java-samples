@@ -42,15 +42,15 @@ public class FacesSimilarityImageToImage extends BaseApiTest<FaceOperationsApi> 
      */
     @Override
     protected void doTest() throws ApiException, URISyntaxException, IOException {
-        String probeFaceId = getApi().detect1(new CreateFaceRequest()
+        String probeFaceId = getApi().detectFace(new CreateFaceRequest()
                 .image(new Image().url(configuration.SIMILARITY_REFERENCE_IMAGE_URL))
         ).getId();
 
-        String referenceFaceLink = Objects.requireNonNull(getApi().detect1(new CreateFaceRequest()
+        String referenceFaceLink = Objects.requireNonNull(getApi().detectFace(new CreateFaceRequest()
                 .image(new Image().url(configuration.SIMILARITY_REFERENCE_IMAGE_URL))
         ).getLinks()).getSelf();
 
-        FaceSimilarityResponse faceSimilarityResponse = getApi().checkSimilarity1(probeFaceId, new FaceSimilarityRequest().referenceFace(referenceFaceLink));
+        FaceSimilarityResponse faceSimilarityResponse = getApi().checkSimilarity(probeFaceId, new FaceSimilarityRequest().referenceFace(referenceFaceLink));
 
         log.info(faceSimilarityResponse.toString());
     }

@@ -32,12 +32,12 @@ public class FacesSimilarityImageToTemplate extends BaseApiTest<FaceOperationsAp
      */
     @Override
     protected void doTest() throws ApiException {
-        String probeFaceId = getApi().detect1(new CreateFaceRequest().image(new Image().url(configuration.EXAMPLE_IMAGE_URL))).getId();
+        String probeFaceId = getApi().detectFace(new CreateFaceRequest().image(new Image().url(configuration.EXAMPLE_IMAGE_URL))).getId();
 
         byte[] template = createTemplate(configuration, getApi());
 
         FaceSimilarityResponse faceSimilarityResponse = getApi()
-                .checkSimilarity1(probeFaceId, new FaceSimilarityRequest().referenceFaceTemplate(template));
+                .checkSimilarity(probeFaceId, new FaceSimilarityRequest().referenceFaceTemplate(template));
 
         log.info(faceSimilarityResponse.toString());
     }
@@ -51,7 +51,7 @@ public class FacesSimilarityImageToTemplate extends BaseApiTest<FaceOperationsAp
      * @throws ApiException If an error occurs during the API call.
      */
     private static byte[] createTemplate(Configuration configuration, FaceOperationsApi faceApi) throws ApiException {
-        String id = faceApi.detect1(new CreateFaceRequest().image(new Image().url(configuration.EXAMPLE_IMAGE_URL))).getId();
+        String id = faceApi.detectFace(new CreateFaceRequest().image(new Image().url(configuration.EXAMPLE_IMAGE_URL))).getId();
         return faceApi.createTemplate(id).getData();
     }
 

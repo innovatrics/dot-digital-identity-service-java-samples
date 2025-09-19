@@ -49,7 +49,7 @@ public class DocumentOcrWithAdvice extends CustomerOnboardingApiTest {
                                 new DocumentClassificationAdvice().addCountriesItem(COUNTRY).addTypesItem(ID_TYPE))));
 
         CreateDocumentPageResponse createDocumentResponse =
-                getApi().createDocumentPage1(customerId, createDocumentPageRequest(getL2DocumentImage("document-front")));
+                getApi().createDocumentPage(customerId, createDocumentPageRequest(getL2DocumentImage("document-front")));
 
         checkDocumentResponseAndDeleteCustomer(createDocumentResponse, customerId);
     }

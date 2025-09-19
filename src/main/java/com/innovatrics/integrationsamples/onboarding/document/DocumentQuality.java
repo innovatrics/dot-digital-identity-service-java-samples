@@ -57,7 +57,7 @@ public class DocumentQuality extends CustomerOnboardingApiTest {
     private void verifyDocumentQuality(String customerId) throws ApiException, URISyntaxException, IOException {
         getApi().createDocument(customerId, new CreateDocumentRequest());
         CreateDocumentPageResponse createDocumentResponse =
-                getApi().createDocumentPage1(customerId, createDocumentPageRequest(getL2DocumentImage("document-front")));
+                getApi().createDocumentPage(customerId, createDocumentPageRequest(getL2DocumentImage("document-front")));
 
         checkDocumentResponseThrowsWhenError(createDocumentResponse);
 

@@ -19,6 +19,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
@@ -50,6 +51,7 @@ public abstract class BaseApiTest<T> {
         apiClient.setBearerToken(configuration.DOT_AUTHENTICATION_TOKEN);
         JSON.setGson(new GsonBuilder()
                         .registerTypeAdapter(byte[].class, new DataTypeDeserializer())
+                .registerTypeAdapter(OffsetDateTime.class, new OffsetDateTimeDeserializer())
                 .setStrictness(Strictness.LENIENT)
                 .setPrettyPrinting().create());
 
@@ -240,20 +242,14 @@ public abstract class BaseApiTest<T> {
         }
     }
 
-    /**
-     * Reads all bytes from the file at the given path and returns them as a byte array.
-     *
-     * @param path the file system path to the file
-     * @return a byte array containing the contents of the specified file
-     * @throws RuntimeException if an I/O error occurs reading from the file
-     */
-    protected byte[] getBinaryData(String path) {
-        try {
-            try (FileInputStream inputStream = new FileInputStream(Path.of(path).toFile())) {
-                return inputStream.readAllBytes();
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("File is missing: " + path, e);
+    protected File getBinaryFile(String path) {
+        if (path == null) {
+            throw new RuntimeException("No path provided.");
         }
+        File file = new File(path);
+        if (!file.exists() || !file.isFile()) {
+            throw new RuntimeException("File is missing: " + path);
+        }
+        return file;
     }
 }

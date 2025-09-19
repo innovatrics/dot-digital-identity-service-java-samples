@@ -54,9 +54,9 @@ public class FaceDetection extends BaseApiTest<FaceOperationsApi> {
     private void detectAndLogFace(final String imageSource, boolean isUrl) throws ApiException, IOException, URISyntaxException {
         final CreateFaceResponse response;
         if (isUrl) {
-            response = getApi().detect1(new CreateFaceRequest().image(new Image().url(imageSource)));
+            response = getApi().detectFace(new CreateFaceRequest().image(new Image().url(imageSource)));
         } else {
-            response = getApi().detect1(new CreateFaceRequest().image(new Image().data(getDetectionImage(imageSource))));
+            response = getApi().detectFace(new CreateFaceRequest().image(new Image().data(getDetectionImage(imageSource))));
         }
 
         if( response.getDetection() == null ) {
